@@ -17,6 +17,16 @@ public class Aircraft {
         name = createName();
         setupInitialValues();
     }
+    
+    public int getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
+    }
+    public int getZ(){
+        return z;
+    }
 
     public void printRadarInfo() {
         System.out.println(name);
@@ -44,14 +54,14 @@ public class Aircraft {
     }
 
     private void setupInitialValues() {
-        x = random.nextInt(1000000);
-        y = random.nextInt(1000000);
+        x = random.nextInt(500);
+        y = random.nextInt(500);
         z = random.nextInt(1000) + 100;
         xspeed = 0;
         yspeed = 0;
         while (xspeed == 0 && yspeed == 0) {
-            xspeed = 40 - random.nextInt(90);
-            yspeed = 40 - random.nextInt(90);
+            xspeed = 4 - random.nextInt(9);
+            yspeed = 4 - random.nextInt(9);
         }
     }
 }
