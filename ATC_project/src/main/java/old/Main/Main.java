@@ -1,7 +1,7 @@
-package Main;
+package old.Main;
 
-import Panel.GamePanel;
-import Logic.*;
+import old.Logic.GameLogic;
+import old.Panel.GamePanel;
 import javax.swing.JFrame;
 import java.awt.EventQueue;
 
@@ -22,13 +22,13 @@ public class Main extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Main ex = new Main();
-                ex.setVisible(true);
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        EventQueue.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                Main ex = new Main();
+//                ex.setVisible(true);
+//            }
+//        });
+//    }
 }

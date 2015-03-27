@@ -1,4 +1,4 @@
-package Logic;
+package atc.logic;
 
 import java.util.Random;
 
@@ -48,7 +48,7 @@ public class Aircraft {
         return sb.toString();//palautetaan luotu tunnus
     }
 
-    public void fly() {
+    public void move() {
         x = x + xspeed;
         y = y + yspeed;
     }

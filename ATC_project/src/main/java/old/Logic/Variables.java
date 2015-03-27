@@ -1,4 +1,4 @@
-package Logic;
+package old.Logic;
 
 public class Variables {
     int initialRadarCoverage;

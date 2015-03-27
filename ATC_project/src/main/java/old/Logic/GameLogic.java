@@ -1,5 +1,6 @@
-package Logic;
+package old.Logic;
 
+import old.Panel.GamePanel;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.concurrent.Executors;
@@ -7,15 +8,18 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 
-import Panel.*;
+
+import java.awt.Graphics;
 
 public class GameLogic {
 
     Aircraft aircraft;
     ArrayList<Aircraft> aircrafts;
     GamePanel gamePanel;
+    Graphics g;
 
     public GameLogic() {
+                
         aircrafts = new ArrayList();
 
         for (int i = 0; i < 3; i++) {
@@ -48,7 +52,7 @@ public class GameLogic {
             Double resoW = reso.getWidth();
             String resoS = Double.toHexString(resoW) + " * " + Double.toString(resoH);
             System.out.println(resoS);
-            //TÄHÄN REPAINT
+            //gamePanel.repaintmethod();
         }
     };
     Runnable move = new Runnable() {//liikuttaa lentokoneita
