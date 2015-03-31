@@ -2,6 +2,7 @@ package atc.gui;
 
 import atc.logic.Aircraft;
 import atc.logic.GameLogic;
+import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 
@@ -33,6 +34,7 @@ public class RadarPanel extends JPanel {
     private void initGamePanel() {
         loadImage();
         setPreferredSize(new Dimension(panelWidth, panelHeight));
+        setBackground(Color.black);
     }
 
     private void loadImage() {

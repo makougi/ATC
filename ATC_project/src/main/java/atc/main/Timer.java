@@ -5,7 +5,7 @@ import atc.logic.*;
 
 public class Timer {
 
-    GUIMain guiMain;
+    GUIFrame guiMain;
     GameLogic gameLogic;
     long timeA;
     int timeLength;
@@ -14,14 +14,14 @@ public class Timer {
     int clockB;
     int clockBTop;
 
-    public Timer(GUIMain gm, GameLogic gl) {
+    public Timer(GUIFrame gm, GameLogic gl) {
         guiMain = gm;
         gameLogic = gl;
         timeLength = 10;
         clockA = 0;
         clockATop = 100;
         clockB = 0;
-        clockBTop = 10;
+        clockBTop = 50;
         timerLoop();
     }
 
@@ -42,7 +42,7 @@ public class Timer {
             clockA = 0;
         }
         if (clockB >= clockBTop) {
-            //gameLogic.update();
+            gameLogic.update();
             clockB = 0;
         }
     }

@@ -1,6 +1,5 @@
 package atc.logic;
 
-import atc.logic.Aircraft;
 import java.util.ArrayList;
 
 public class GameLogic {
@@ -11,10 +10,9 @@ public class GameLogic {
     public GameLogic() {
         aircrafts = new ArrayList();
 
-//        for (int i = 0; i < 3; i++) {
-//            aircraft = new Aircraft();
-//            aircrafts.add(aircraft);
-//        }
+        for (int i = 0; i < 3; i++) {
+            aircrafts.add(new Aircraft());
+        }
     }
 
     public void update() {
