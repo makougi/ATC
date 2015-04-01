@@ -6,27 +6,26 @@ import java.awt.Graphics;
 import atc.logic.GameLogic;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 import java.awt.Toolkit;
 
-public class CommandPanel extends JPanel {
+public class InfoPanel extends JPanel {
 
     GameLogic gameLogic;
     private int panelWidth;
     private int panelHeight;
 
-    public CommandPanel(GameLogic gl) {
+    public InfoPanel(GameLogic gl, Color c) {
         gameLogic = gl;
 
         panelHeight = (Toolkit.getDefaultToolkit().getScreenSize().height-100)/3;
         panelWidth = panelHeight;
 
-        initGamePanel();
+        initGamePanel(c);
     }
 
-    private void initGamePanel() {
+    private void initGamePanel(Color c) {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
-        setBackground(Color.red);
+        setBackground(c);
     }
 
     @Override

@@ -1,7 +1,8 @@
-atc\gui\GUI.class
+atc\gui\CommandPanel.class
+atc\gui\MainPanel.class
 atc\gui\RadarPanel.class
 atc\logic\GameLogic.class
+atc\gui\GUIFrame.class
 atc\main\Main.class
-atc\gui\GUIMain.class
 atc\logic\Aircraft.class
 atc\main\Timer.class

@@ -17,6 +17,9 @@ public class Aircraft {
         name = createName();
         setupInitialValues();
     }
+    public String getName(){
+        return name;
+    }
     
     public int getX(){
         return x;
@@ -54,14 +57,14 @@ public class Aircraft {
     }
 
     private void setupInitialValues() {
-        x = random.nextInt(500);
-        y = random.nextInt(500);
+        x = random.nextInt(500)+100;
+        y = random.nextInt(500)+100;
         z = random.nextInt(1000) + 100;
         xspeed = 0;
         yspeed = 0;
         while (xspeed == 0 && yspeed == 0) {
-            xspeed = 4 - random.nextInt(9);
-            yspeed = 4 - random.nextInt(9);
+            xspeed = 2 - random.nextInt(5);
+            yspeed = 2 - random.nextInt(5);
         }
     }
 }

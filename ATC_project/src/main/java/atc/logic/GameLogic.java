@@ -10,7 +10,7 @@ public class GameLogic {
     public GameLogic() {
         aircrafts = new ArrayList();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 30; i++) {
             aircrafts.add(new Aircraft());
         }
     }

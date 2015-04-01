@@ -21,7 +21,7 @@ public class Timer {
         clockA = 0;
         clockATop = 100;
         clockB = 0;
-        clockBTop = 50;
+        clockBTop = 100;
         timerLoop();
     }
 

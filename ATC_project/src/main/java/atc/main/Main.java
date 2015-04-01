@@ -2,7 +2,6 @@ package atc.main;
 
 import atc.logic.GameLogic;
 import atc.gui.*;
-import java.awt.Frame;
 
 public class Main {
 
