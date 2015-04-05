@@ -25,15 +25,15 @@ public class RadarPanel extends JPanel {
     private int aX;
     private int aY;
     private int aZ;
-    private String aName;
+    private String aIdentifier;
     
     private int fontScale;
     
 
-    public RadarPanel(GameLogic gameLogic) {
-        aircrafts = gameLogic.getAircrafts();//otetaan gamelogicista arraylist lentokoneista, jota käytetään niiden piirtämiseen
-        panelHeight = Toolkit.getDefaultToolkit().getScreenSize().height - 100;
+    public RadarPanel(GameLogic gameLogic,int ph) {
+        panelHeight = ph;
         panelWidth = panelHeight;
+        aircrafts = gameLogic.getAircrafts();//otetaan gamelogicista arraylist lentokoneista, jota käytetään niiden piirtämiseen
         imageSize = 3;
         zoom = 1;
         fontScale = 4;
@@ -63,10 +63,10 @@ public class RadarPanel extends JPanel {
             aX=a.getX();
             aY=a.getY();
             aZ=a.getZ();
-            aName=a.getName();
+            aIdentifier=a.getIdentifier();
             g.setColor(Color.yellow);
             g.drawImage(square, aX / zoom, aY / zoom, imageSize, imageSize, this);
-            g.drawString(aName, aX-(fontScale*3), aY+(fontScale*5));
+            g.drawString(aIdentifier, aX-(fontScale*3), aY+(fontScale*5));
             g.drawString(""+aZ, aX-(fontScale*3), aY+(fontScale*8));
         }
     }

@@ -20,15 +20,21 @@ public class CommandPanel extends JPanel {
     private ArrayDeque<String> stringQueue;
     private int rowLength;
     private Font font;
+    private Color color;
+    private Boolean invalidCommand;
+    private String infoText;
 
-    public CommandPanel(GameLogic gl) {
+    public CommandPanel(GameLogic gl, Color cl, int ph) {
+        infoText = "";
+        invalidCommand = false;
+        color = cl;
         gameLogic = gl;
 
-        panelHeight = (Toolkit.getDefaultToolkit().getScreenSize().height - 100) / 3;
+        panelHeight = ph / 3;
         panelWidth = panelHeight;
 
-        stringY = panelHeight / 10;
-        stringX = stringY;
+        stringY = panelHeight / 8;
+        stringX = stringY/2;
 
         rowLength = panelWidth / 10;
         stringQueue = new ArrayDeque();
@@ -37,17 +43,24 @@ public class CommandPanel extends JPanel {
         font = new Font("Arial", Font.BOLD, 12);
 
         initGamePanel();
+        gl.getCommandParser().setCommandPanel(this);
+    }
+
+    public void invalidCommand() {
+        infoText = "Invalid command";
     }
 
     private void initGamePanel() {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
-        setBackground(Color.lightGray);
+        setBackground(color);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawText(g);
+        drawInfoText(g);
+
     }
 
     private void drawText(Graphics g) {
@@ -57,6 +70,11 @@ public class CommandPanel extends JPanel {
             g.drawString(s, stringX, stringY + rowHeight);
             rowHeight += 20;
         }
+    }
+
+    private void drawInfoText(Graphics g) {
+        g.setFont(font);
+        g.drawString(infoText, stringX, stringY);
     }
 
     public void keybEnter() {
@@ -82,6 +100,9 @@ public class CommandPanel extends JPanel {
     }
 
     public void keybCharacter(char c) {
+        if (infoText.length() != 0) {
+            infoText = "";
+        }
         if (stringQueue.peekLast().length() >= rowLength) {
             stringQueue.add("" + c);
         } else {

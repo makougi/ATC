@@ -5,20 +5,42 @@ import java.util.Random;
 public class Aircraft {
 
     private Random random;
-    private String name;
+    private String identifier;
     private int x;
     private int y;
-    private int z;
+    private int altitude;
     private int xspeed;
     private int yspeed;
+    private int heading;
+    private int speed;
+    private int altitudeCommand;
+    private int headingCommand;
+    private int speedCommand; 
 
     public Aircraft() {
         random = new Random();
-        name = createName();
+        identifier = createName();
         setupInitialValues();
     }
-    public String getName(){
-        return name;
+    public void setAltitudeCommand(char[] c){
+        altitudeCommand = Character.getNumericValue(c[0])*10+Character.getNumericValue(c[1]);
+        System.out.println(identifier+" setAlt "+altitudeCommand);
+    }
+    public void setHeadingCommand(char[] c){
+        headingCommand = (Character.getNumericValue(c[0]))*100+(Character.getNumericValue(c[1])*10+Character.getNumericValue(c[2]));
+        System.out.println(identifier+" setHeading "+headingCommand);
+    }
+    public void setSpeedCommand(char[] c){
+        speedCommand = 0;
+        if (Character.isDigit(c[0])){
+            speedCommand = (Character.getNumericValue(c[0]))*1000;
+        }
+        speedCommand+=(Character.getNumericValue(c[1])*100+(Character.getNumericValue(c[2]))*10+Character.getNumericValue(c[3]));
+        System.out.println(identifier+" setSpeed "+speedCommand);
+    }
+    
+    public String getIdentifier(){
+        return identifier;
     }
     
     public int getX(){
@@ -28,14 +50,14 @@ public class Aircraft {
         return y;
     }
     public int getZ(){
-        return z;
+        return altitude;
     }
 
     public void printRadarInfo() {
-        System.out.println(name);
+        System.out.println(identifier);
         System.out.println("x: " + x / 100);
         System.out.println("y: " + y / 100);
-        System.out.println("alt: " + z);
+        System.out.println("alt: " + altitude);
         System.out.println();
     }
 
@@ -59,7 +81,7 @@ public class Aircraft {
     private void setupInitialValues() {
         x = random.nextInt(500)+100;
         y = random.nextInt(500)+100;
-        z = random.nextInt(1000) + 100;
+        altitude = random.nextInt(1000) + 100;
         xspeed = 0;
         yspeed = 0;
         while (xspeed == 0 && yspeed == 0) {

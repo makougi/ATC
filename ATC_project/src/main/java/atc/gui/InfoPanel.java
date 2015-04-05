@@ -14,10 +14,10 @@ public class InfoPanel extends JPanel {
     private int panelWidth;
     private int panelHeight;
 
-    public InfoPanel(GameLogic gl, Color c) {
+    public InfoPanel(GameLogic gl, Color c,int ph) {
         gameLogic = gl;
 
-        panelHeight = (Toolkit.getDefaultToolkit().getScreenSize().height-100)/3;
+        panelHeight = ph/3;
         panelWidth = panelHeight;
 
         initGamePanel(c);

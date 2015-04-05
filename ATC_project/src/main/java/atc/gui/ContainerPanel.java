@@ -13,11 +13,13 @@ public class ContainerPanel extends JPanel {
     GameLogic gameLogic;
     private int panelWidth;
     private int panelHeight;
+    private Color color;
 
-    public ContainerPanel(GameLogic gl) {
+    public ContainerPanel(GameLogic gl,Color cl, int ph) {
+        color = cl;
         gameLogic = gl;
 
-        panelHeight = (Toolkit.getDefaultToolkit().getScreenSize().height-100);
+        panelHeight = ph;
         panelWidth = panelHeight/3;
 
         initGamePanel();
@@ -25,7 +27,7 @@ public class ContainerPanel extends JPanel {
 
     private void initGamePanel() {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
-        setBackground(Color.yellow);
+        setBackground(color);
     }
 
     @Override
