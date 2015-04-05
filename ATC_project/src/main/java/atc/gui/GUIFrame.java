@@ -15,6 +15,7 @@ public class GUIFrame extends JFrame {
     CommandPanel commandPanel;
     InfoPanel infoPanel1;
     InfoPanel infoPanel2;
+    KeyboardListener keyboardListener;
 
     public GUIFrame(GameLogic gl) {
         setLayout(new GridBagLayout());
@@ -34,6 +35,9 @@ public class GUIFrame extends JFrame {
 
         commandPanel = new CommandPanel(gl);
         containerPanel.add(commandPanel);
+        
+        keyboardListener = new KeyboardListener(gl,commandPanel);
+        containerPanel.add(keyboardListener);
 
         pack();
         setTitle("ATC");
