@@ -16,26 +16,29 @@ import java.util.ArrayList;
 public class RadarPanel extends JPanel {
 
     private Image square;
+    private Image squareHistory;
     private int panelWidth;
     private int panelHeight;
     private int imageSize;
-    private int zoom;//muuttuja näkymän zoomaamista varten
+    private int zoom;
     private ArrayList<Aircraft> aircrafts;
-    
+
     private int aX;
     private int aY;
     private int aZ;
+    private int aS;
+    private int aH;
     private String aIdentifier;
-    
-    private int fontScale;
-    
+    private int[][] aHistory;
 
-    public RadarPanel(GameLogic gameLogic,int ph) {
+    private int fontScale;
+
+    public RadarPanel(GameLogic gameLogic, int ph) {
         panelHeight = ph;
         panelWidth = panelHeight;
         aircrafts = gameLogic.getAircrafts();//otetaan gamelogicista arraylist lentokoneista, jota käytetään niiden piirtämiseen
-        imageSize = 3;
-        zoom = 1;
+        imageSize = 4;
+        zoom = 1000;
         fontScale = 4;
 
         initGamePanel();
@@ -50,6 +53,8 @@ public class RadarPanel extends JPanel {
     private void loadImage() {
         ImageIcon ii = new ImageIcon("Square.png");
         square = ii.getImage();
+        ii = new ImageIcon("SquareHistory.png");
+        squareHistory = ii.getImage();
     }
 
     @Override
@@ -60,14 +65,21 @@ public class RadarPanel extends JPanel {
 
     private void drawAircrafts(Graphics g) {
         for (Aircraft a : aircrafts) {
-            aX=a.getX();
-            aY=a.getY();
-            aZ=a.getZ();
-            aIdentifier=a.getIdentifier();
-            g.setColor(Color.yellow);
-            g.drawImage(square, aX / zoom, aY / zoom, imageSize, imageSize, this);
-            g.drawString(aIdentifier, aX-(fontScale*3), aY+(fontScale*5));
-            g.drawString(""+aZ, aX-(fontScale*3), aY+(fontScale*8));
+            aX = a.getX() / zoom;
+            aY = a.getY() / zoom;
+            aZ = a.getZ();
+            aS = a.getSpeed();
+            aH = a.getHeading();
+            aIdentifier = a.getIdentifier();
+            aHistory = a.getHistory();
+            g.setColor(Color.green);
+            g.drawImage(square, aX, aY, imageSize, imageSize, this);
+            for (int i = 0; i < aHistory.length; i++) {
+                g.drawImage(squareHistory, aHistory[i][0] / zoom, aHistory[i][1] / zoom, imageSize / 2, imageSize / 2, this);
+            }
+            g.drawString(aIdentifier, aX - (fontScale * 4), aY + (fontScale * 5));
+            g.drawString("" + aZ, aX - (fontScale * 2), aY + (fontScale * 8));
+            g.drawString("" + aH, aX - (fontScale * 2), aY + (fontScale * 11));
         }
     }
 

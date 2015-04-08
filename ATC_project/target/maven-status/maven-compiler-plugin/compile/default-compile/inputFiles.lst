@@ -1,8 +1,12 @@
 C:\Users\makougi\ATC\ATC_project\src\main\java\atc\gui\GUIFrame.java
+C:\Users\makougi\ATC\ATC_project\src\main\java\atc\logic\CommandParser.java
 C:\Users\makougi\ATC\ATC_project\src\main\java\atc\main\Main.java
+C:\Users\makougi\ATC\ATC_project\src\main\java\atc\gui\ContainerPanel.java
 C:\Users\makougi\ATC\ATC_project\src\main\java\atc\logic\Aircraft.java
+C:\Users\makougi\ATC\ATC_project\src\main\java\atc\gui\KeyboardListener.java
 C:\Users\makougi\ATC\ATC_project\src\main\java\atc\logic\GameLogic.java
-C:\Users\makougi\ATC\ATC_project\src\main\java\atc\gui\MainPanel.java
+C:\Users\makougi\ATC\ATC_project\src\main\java\atc\logic\Values.java
+C:\Users\makougi\ATC\ATC_project\src\main\java\atc\gui\InfoPanel.java
 C:\Users\makougi\ATC\ATC_project\src\main\java\atc\main\Timer.java
 C:\Users\makougi\ATC\ATC_project\src\main\java\atc\gui\CommandPanel.java
 C:\Users\makougi\ATC\ATC_project\src\main\java\atc\gui\RadarPanel.java

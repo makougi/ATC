@@ -13,7 +13,7 @@ public class GameLogic {
         aircrafts = new ArrayList();
 
         for (int i = 0; i < 30; i++) {
-            aircrafts.add(new Aircraft());
+            aircrafts.add(new Aircraft(this));
         }
         commandParser = new CommandParser(this);
 
@@ -24,12 +24,12 @@ public class GameLogic {
     }
 
     public void update() {
-        moveAircrafts();
+        updateAircrafts();
     }
 
-    private void moveAircrafts() {
+    private void updateAircrafts() {
         for (Aircraft a : aircrafts) {
-            a.move();
+            a.update();
         }
     }
 

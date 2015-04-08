@@ -9,84 +9,129 @@ public class Aircraft {
     private int x;
     private int y;
     private int altitude;
-    private int xspeed;
-    private int yspeed;
     private int heading;
     private int speed;
     private int altitudeCommand;
     private int headingCommand;
-    private int speedCommand; 
+    private int speedCommand;
+    private int[][] headingXYValues;
+    private int[][] history;
+    private int historyLength;
 
-    public Aircraft() {
+    public Aircraft(GameLogic gl) {
+        historyLength = 10;
+        history = new int[historyLength][2];//recent x&y positions
         random = new Random();
-        identifier = createName();
+        identifier = Values.createIdentifier(gl);
+        headingXYValues = Values.getHeadingXYValues();
         setupInitialValues();
     }
-    public void setAltitudeCommand(char[] c){
-        altitudeCommand = Character.getNumericValue(c[0])*10+Character.getNumericValue(c[1]);
-        System.out.println(identifier+" setAlt "+altitudeCommand);
+
+    public void setAltitudeCommand(char[] c) {
+        altitudeCommand = Character.getNumericValue(c[0]) * 10 + Character.getNumericValue(c[1]);
     }
-    public void setHeadingCommand(char[] c){
-        headingCommand = (Character.getNumericValue(c[0]))*100+(Character.getNumericValue(c[1])*10+Character.getNumericValue(c[2]));
-        System.out.println(identifier+" setHeading "+headingCommand);
-    }
-    public void setSpeedCommand(char[] c){
-        speedCommand = 0;
-        if (Character.isDigit(c[0])){
-            speedCommand = (Character.getNumericValue(c[0]))*1000;
+
+    public void setHeadingCommand(char[] c) {
+        headingCommand = (Character.getNumericValue(c[0])) * 100 + (Character.getNumericValue(c[1]) * 10 + Character.getNumericValue(c[2]));
+        while (headingCommand > 359) {
+            headingCommand -= 360;
         }
-        speedCommand+=(Character.getNumericValue(c[1])*100+(Character.getNumericValue(c[2]))*10+Character.getNumericValue(c[3]));
-        System.out.println(identifier+" setSpeed "+speedCommand);
+        while (headingCommand < 0) {
+            headingCommand += 360;
+        }
     }
-    
-    public String getIdentifier(){
+
+    public void setSpeedCommand(char[] c) {
+        speedCommand = 0;
+        if (Character.isDigit(c[0])) {
+            speedCommand = (Character.getNumericValue(c[0])) * 1000;
+        }
+        speedCommand += (Character.getNumericValue(c[1]) * 100 + (Character.getNumericValue(c[2])) * 10 + Character.getNumericValue(c[3]));
+    }
+
+    public int[][] getHistory() {
+        return history;
+    }
+
+    public String getIdentifier() {
         return identifier;
     }
-    
-    public int getX(){
+
+    public int getX() {
         return x;
     }
-    public int getY(){
+
+    public int getY() {
         return y;
     }
-    public int getZ(){
+
+    public int getZ() {
         return altitude;
     }
-
-    public void printRadarInfo() {
-        System.out.println(identifier);
-        System.out.println("x: " + x / 100);
-        System.out.println("y: " + y / 100);
-        System.out.println("alt: " + altitude);
-        System.out.println();
+    public int getSpeed(){
+        return speed;
+    }
+    public int getHeading(){
+        return heading;
     }
 
-    private String createName() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        StringBuilder sb = new StringBuilder(6);
-        for (int i = 0; i < 3; i++) {
-            sb.append(random.nextInt(10));
+    public void update() {
+        updateHistory();
+        updatePosition();
+        updateAltitude();
+        updateSpeed();
+        updateHeading();
+    }
+
+    private void updateHistory() {
+        for (int i = historyLength - 1; i > 0; i--) {
+            history[i][0] = history[i - 1][0];
+            history[i][1] = history[i - 1][1];
         }
-        sb.append(characters.charAt(random.nextInt(characters.length())));
-        sb.append(characters.charAt(random.nextInt(characters.length())));
-        sb.append(characters.charAt(random.nextInt(characters.length())));
-        return sb.toString();//palautetaan luotu tunnus
+        history[0][0] = x;
+        history[0][1] = y;
     }
 
-    public void move() {
-        x = x + xspeed;
-        y = y + yspeed;
+    private void updatePosition() {
+        x += headingXYValues[heading][0] * speed;
+        y += headingXYValues[heading][1] * speed;
+    }
+
+    private void updateAltitude() {
+        if (altitude < altitudeCommand) {
+            altitude++;
+        }
+        if (altitude > altitudeCommand) {
+            altitude--;
+        }
+    }
+
+    private void updateSpeed() {
+        if (speed < speedCommand) {
+            speed++;
+        }
+        if (speed > speedCommand) {
+            speed--;
+        }
+    }
+
+    private void updateHeading() {//tätä pitää vielä kehittää
+        if (heading < headingCommand) {
+            heading=heading+10;
+        }
+        if (heading > headingCommand) {
+            heading=heading-10;
+        }
     }
 
     private void setupInitialValues() {
-        x = random.nextInt(500)+100;
-        y = random.nextInt(500)+100;
+        x = random.nextInt(300000) + 200000;
+        y = random.nextInt(300000) + 200000;
         altitude = random.nextInt(1000) + 100;
-        xspeed = 0;
-        yspeed = 0;
-        while (xspeed == 0 && yspeed == 0) {
-            xspeed = 2 - random.nextInt(5);
-            yspeed = 2 - random.nextInt(5);
-        }
+        speed = random.nextInt(40) + 16;
+        heading = random.nextInt(360);
+        altitudeCommand = altitude;
+        speedCommand = speed;
+        headingCommand = heading;
     }
 }
