@@ -29,6 +29,9 @@ public class Aircraft {
 
     public void setAltitudeCommand(char[] c) {
         altitudeCommand = Character.getNumericValue(c[0]) * 10 + Character.getNumericValue(c[1]);
+        if (altitudeCommand<10){
+            altitudeCommand = 10;
+        }
     }
 
     public void setHeadingCommand(char[] c) {
@@ -47,6 +50,9 @@ public class Aircraft {
             speedCommand = (Character.getNumericValue(c[0])) * 1000;
         }
         speedCommand += (Character.getNumericValue(c[1]) * 100 + (Character.getNumericValue(c[2])) * 10 + Character.getNumericValue(c[3]));
+        if (speedCommand<160){
+            speedCommand = 160;
+        }
     }
 
     public int[][] getHistory() {
@@ -68,10 +74,12 @@ public class Aircraft {
     public int getZ() {
         return altitude;
     }
-    public int getSpeed(){
+
+    public int getSpeed() {
         return speed;
     }
-    public int getHeading(){
+
+    public int getHeading() {
         return heading;
     }
 
@@ -117,10 +125,27 @@ public class Aircraft {
 
     private void updateHeading() {//tätä pitää vielä kehittää
         if (heading < headingCommand) {
-            heading=heading+10;
+            if (heading + 10 > 359) {
+                heading = headingCommand;
+            } else {
+                heading = heading + 10;
+            }
+
         }
         if (heading > headingCommand) {
-            heading=heading-10;
+            if (heading - 10 < 0) {
+                heading = headingCommand;
+            } else {
+                heading = heading - 10;
+            }
+        }
+
+        //varmistus:
+        while (heading < 0) {
+            heading += 360;
+        }
+        while (heading > 359) {
+            heading -= 360;
         }
     }
 

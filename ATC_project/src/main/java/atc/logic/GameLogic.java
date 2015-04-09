@@ -12,7 +12,7 @@ public class GameLogic {
 
         aircrafts = new ArrayList();
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 1; i++) {
             aircrafts.add(new Aircraft(this));
         }
         commandParser = new CommandParser(this);
@@ -25,6 +25,7 @@ public class GameLogic {
 
     public void update() {
         updateAircrafts();
+        System.out.println(this.getAircrafts().get(0).getHeading());
     }
 
     private void updateAircrafts() {
