@@ -34,11 +34,9 @@ public class RadarPanel extends JPanel {
 
     private int fontScale;
     private GameLogic gl;
-    private int[] runwayPosition;
 
     public RadarPanel(GameLogic gameLogic, int ph) {
         gl = gameLogic;
-        runwayPosition = gl.getRunwayPosition();
         panelHeight = ph;
         panelWidth = panelHeight;
         aircrafts = gameLogic.getAircrafts();//otetaan gamelogicista arraylist lentokoneista, jota käytetään niiden piirtämiseen
@@ -73,9 +71,9 @@ public class RadarPanel extends JPanel {
 
     private void drawRunway(Graphics g) {
         int pos = 100000 / zoom;
-        g.drawImage(whiteDot, runwayPosition[0], runwayPosition[1], imageSize / 2 + 1, imageSize / 2 + 1, this);
+        g.drawImage(whiteDot, gl.getRunwayPosition()[0], gl.getRunwayPosition()[1], imageSize / 2 + 1, imageSize / 2 + 1, this);
         for (int i = 0; i < 10; i++) {
-            g.drawImage(whiteDot, runwayPosition[0], runwayPosition[1] + pos, imageSize / 2 + 1, imageSize / 2 + 1, this);
+            g.drawImage(whiteDot, gl.getRunwayPosition()[0], gl.getRunwayPosition()[1] + pos, imageSize / 2 + 1, imageSize / 2 + 1, this);
             pos += 10000 / zoom;
         }
     }

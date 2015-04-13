@@ -195,7 +195,7 @@ public class Aircraft {
     private void setupInitialValues() {
         x = random.nextInt(300000) + 200000;
         y = random.nextInt(300000) + 200000;
-        altitude = random.nextInt(1000) + 100;
+        altitude = random.nextInt(50) + 30;
         speed = random.nextInt(40) + 16;
         heading = random.nextInt(360);
         altitudeCommand = altitude;

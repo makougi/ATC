@@ -8,10 +8,9 @@ public class GameLogic {
     private ArrayList<Aircraft> aircrafts;
     private CommandParser commandParser;
     private int zoom;
-    private int[] runwayPosition;
+    private int[] runwayPosition = {300, 300};;
 
     public GameLogic() {
-        int[] runwayPosition = {300, 300};
         zoom = 1000;
         aircrafts = new ArrayList();
 
