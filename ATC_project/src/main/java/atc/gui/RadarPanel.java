@@ -17,6 +17,7 @@ public class RadarPanel extends JPanel {
 
     private Image square;
     private Image squareHistory;
+    private Image whiteDot;
     private int panelWidth;
     private int panelHeight;
     private int imageSize;
@@ -32,13 +33,17 @@ public class RadarPanel extends JPanel {
     private int[][] aHistory;
 
     private int fontScale;
+    private GameLogic gl;
+    private int[] runwayPosition;
 
     public RadarPanel(GameLogic gameLogic, int ph) {
+        gl = gameLogic;
+        runwayPosition = gl.getRunwayPosition();
         panelHeight = ph;
         panelWidth = panelHeight;
         aircrafts = gameLogic.getAircrafts();//otetaan gamelogicista arraylist lentokoneista, jota käytetään niiden piirtämiseen
         imageSize = 4;
-        zoom = 1000;
+        zoom = gl.getZoom();
         fontScale = 4;
 
         initGamePanel();
@@ -55,12 +60,24 @@ public class RadarPanel extends JPanel {
         square = ii.getImage();
         ii = new ImageIcon("SquareHistory.png");
         squareHistory = ii.getImage();
+        ii = new ImageIcon("WhiteDot.png");
+        whiteDot = ii.getImage();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawAircrafts(g);
+        drawRunway(g);
+    }
+
+    private void drawRunway(Graphics g) {
+        int pos = 100000 / zoom;
+        g.drawImage(whiteDot, runwayPosition[0], runwayPosition[1], imageSize / 2 + 1, imageSize / 2 + 1, this);
+        for (int i = 0; i < 10; i++) {
+            g.drawImage(whiteDot, runwayPosition[0], runwayPosition[1] + pos, imageSize / 2 + 1, imageSize / 2 + 1, this);
+            pos += 10000 / zoom;
+        }
     }
 
     private void drawAircrafts(Graphics g) {
@@ -80,6 +97,10 @@ public class RadarPanel extends JPanel {
             g.drawString(aIdentifier, aX - (fontScale * 4), aY + (fontScale * 5));
             g.drawString("" + aZ, aX - (fontScale * 2), aY + (fontScale * 8));
             g.drawString("" + aH, aX - (fontScale * 2), aY + (fontScale * 11));
+            if (a.getMode() == 1) {
+                g.setColor(Color.yellow);
+                g.drawString("landing", aX - (fontScale * 2), aY + (fontScale * 14));
+            }
         }
     }
 

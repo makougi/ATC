@@ -17,8 +17,12 @@ public class Aircraft {
     private int[][] headingXYValues;
     private int[][] history;
     private int historyLength;
+    private int mode;
+    private GameLogic gl;
 
-    public Aircraft(GameLogic gl) {
+    public Aircraft(GameLogic gameLogic) {
+        gl = gameLogic;
+        mode = 0;//mode 0 normal, mode 1 landing
         historyLength = 10;
         history = new int[historyLength][2];//recent x&y positions
         random = new Random();
@@ -26,16 +30,27 @@ public class Aircraft {
         headingXYValues = Values.getHeadingXYValues();
         setupInitialValues();
     }
+    public int getMode(){
+        return mode;
+    }
+    
+    public void setMode(int m){
+        mode = m;
+    }
 
     public void setAltitudeCommand(char[] c) {
-        altitudeCommand = Character.getNumericValue(c[0]) * 10 + Character.getNumericValue(c[1]);
-        if (altitudeCommand<10){
-            altitudeCommand = 10;
+        if (mode == 0) {
+            altitudeCommand = Character.getNumericValue(c[0]) * 10 + Character.getNumericValue(c[1]);
+            if (altitudeCommand < 10) {
+                altitudeCommand = 10;
+            }
         }
     }
 
     public void setHeadingCommand(char[] c) {
-        headingCommand = (Character.getNumericValue(c[0])) * 100 + (Character.getNumericValue(c[1]) * 10 + Character.getNumericValue(c[2]));
+        if (mode == 0) {
+            headingCommand = (Character.getNumericValue(c[0])) * 100 + (Character.getNumericValue(c[1]) * 10 + Character.getNumericValue(c[2]));
+        }
         while (headingCommand > 359) {
             headingCommand -= 360;
         }
@@ -45,13 +60,15 @@ public class Aircraft {
     }
 
     public void setSpeedCommand(char[] c) {
-        speedCommand = 0;
-        if (Character.isDigit(c[0])) {
-            speedCommand = (Character.getNumericValue(c[0])) * 1000;
-        }
-        speedCommand += (Character.getNumericValue(c[1]) * 100 + (Character.getNumericValue(c[2])) * 10 + Character.getNumericValue(c[3]));
-        if (speedCommand<160){
-            speedCommand = 160;
+        if (mode == 0) {
+            speedCommand = 0;
+            if (Character.isDigit(c[0])) {
+                speedCommand = (Character.getNumericValue(c[0])) * 1000;
+            }
+            speedCommand += (Character.getNumericValue(c[1]) * 100 + (Character.getNumericValue(c[2])) * 10 + Character.getNumericValue(c[3]));
+            if (speedCommand < 160) {
+                speedCommand = 160;
+            }
         }
     }
 
@@ -84,11 +101,37 @@ public class Aircraft {
     }
 
     public void update() {
+        if (speed == 0){
+            gl.removeAircraft(this);
+            return;
+        }
+        if (mode == 1) {//if landing
+            mode1Commands();
+        }
         updateHistory();
         updatePosition();
         updateAltitude();
         updateSpeed();
         updateHeading();
+    }
+
+    private void mode1Commands() {//if landing
+        altitudeCommand = 0;
+
+        if (x > gl.getRunwayPosition()[0]) {
+            headingCommand = 355;
+        }
+        if (x < gl.getRunwayPosition()[0]) {
+            headingCommand = 5;
+        }
+        if (x == gl.getRunwayPosition()[0]) {
+            headingCommand = 0;
+        }
+        if (altitude > 0) {
+            speedCommand = 140;
+        } else {
+            speedCommand = 0;
+        }
     }
 
     private void updateHistory() {
