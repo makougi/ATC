@@ -26,13 +26,13 @@ public class GUIFrame extends JFrame {
         radarPanel = new RadarPanel(gl,panelHeight);
         add(radarPanel);
 
-        containerPanel = new ContainerPanel(gl,Color.yellow,panelHeight);
+        containerPanel = new ContainerPanel(gl,Color.gray,panelHeight);
         add(containerPanel);
 
-        infoPanel1 = new InfoPanel(gl,Color.cyan,panelHeight);
+        infoPanel1 = new InfoPanel(gl,Color.lightGray,panelHeight);
         containerPanel.add(infoPanel1);
 
-        infoPanel2 = new InfoPanel(gl,Color.pink,panelHeight);
+        infoPanel2 = new InfoPanel(gl,Color.lightGray,panelHeight);
         containerPanel.add(infoPanel2);
 
         commandPanel = new CommandPanel(gl,Color.lightGray,panelHeight);
@@ -45,6 +45,9 @@ public class GUIFrame extends JFrame {
         setTitle("ATC");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+    public void updateInfoPanel(){
+        infoPanel1.drawUpdate();
     }
 
     public void updateRadarPanel() {

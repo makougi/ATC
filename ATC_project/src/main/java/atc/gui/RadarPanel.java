@@ -90,15 +90,23 @@ public class RadarPanel extends JPanel {
             g.setColor(Color.green);
             g.drawImage(square, aX, aY, imageSize, imageSize, this);
             for (int i = 0; i < aHistory.length; i++) {
-                g.drawImage(squareHistory, aHistory[i][0] / zoom, aHistory[i][1] / zoom, imageSize / 2, imageSize / 2, this);
+                g.drawImage(squareHistory, (aHistory[i][0] / zoom) + ((imageSize - 1) / 2), aHistory[i][1] / zoom, imageSize / 2, imageSize / 2, this);
             }
             g.drawString(aIdentifier, aX - (fontScale * 4), aY + (fontScale * 5));
-            g.drawString("" + aZ, aX - (fontScale * 2), aY + (fontScale * 8));
-            g.drawString("" + aH, aX - (fontScale * 2), aY + (fontScale * 11));
-            if (a.getMode() == 1) {
+            if (a.getMode() != 1) {
+                if (aH >= 100) {
+                    g.drawString("" + aH, aX - (fontScale * 2), aY + (fontScale * 8));
+                } else if (aH >= 10) {
+                    g.drawString("0" + aH, aX - (fontScale * 2), aY + (fontScale * 8));
+                } else {
+                    g.drawString("00" + aH, aX - (fontScale * 2), aY + (fontScale * 8));
+                }
+            } else {
                 g.setColor(Color.yellow);
-                g.drawString("landing", aX - (fontScale * 2), aY + (fontScale * 14));
+                g.drawString("L", aX, aY + (fontScale * 8));
+                g.setColor(Color.green);
             }
+            g.drawString("" + aZ, aX - (fontScale * 2), aY + (fontScale * 11));
         }
     }
 

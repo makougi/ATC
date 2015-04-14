@@ -38,19 +38,19 @@ public class Values {
             headingXY[i][0] = x;
             headingXY[i][1] = y;
 
-            if (i <= 90) {
+            if (i < 90) {
                 x++;
                 y++;
             }
-            if (i > 90 && i <= 180) {
+            if (i >= 90 && i < 180) {
                 x--;
                 y++;
             }
-            if (i > 180 && i <= 270) {
+            if (i >= 180 && i < 270) {
                 x--;
                 y--;
             }
-            if (i > 270) {
+            if (i >= 270) {
                 x++;
                 y--;
             }

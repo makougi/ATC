@@ -24,6 +24,9 @@ public class CommandParser {
         input = new ArrayDeque();
         temp = new ArrayDeque();
     }
+    public Aircraft getAircraft(){
+        return aircraft;
+    }
 
     public void setCommandPanel(CommandPanel cp) {
         commandPanel = cp;

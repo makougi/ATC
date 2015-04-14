@@ -14,6 +14,7 @@ public class Aircraft {
     private int altitudeCommand;
     private int headingCommand;
     private int speedCommand;
+    private int slowDescendValue;
     private int[][] headingXYValues;
     private int[][] history;
     private int historyLength;
@@ -29,12 +30,14 @@ public class Aircraft {
         identifier = Values.createIdentifier(gl);
         headingXYValues = Values.getHeadingXYValues();
         setupInitialValues();
+        slowDescendValue = 0;
     }
-    public int getMode(){
+
+    public int getMode() {
         return mode;
     }
-    
-    public void setMode(int m){
+
+    public void setMode(int m) {
         mode = m;
     }
 
@@ -99,14 +102,25 @@ public class Aircraft {
     public int getHeading() {
         return heading;
     }
+        public int getZCommand() {
+        return altitudeCommand;
+    }
+
+    public int getSpeedCommand() {
+        return speedCommand;
+    }
+
+    public int getHeadingCommand() {
+        return headingCommand;
+    }
 
     public void update() {
-        if (speed == 0){
+        if (speed == 0) {
             gl.removeAircraft(this);
             return;
         }
         if (mode == 1) {//if landing
-            mode1Commands();
+            landingCommands();
         }
         updateHistory();
         updatePosition();
@@ -115,16 +129,20 @@ public class Aircraft {
         updateHeading();
     }
 
-    private void mode1Commands() {//if landing
-        altitudeCommand = 0;
+    private void landingCommands() {
+        if (y / gl.getZoom() > gl.getRunwayPosition()[1] + 100) {
+            altitudeCommand = 10;
+        } else {
+            altitudeCommand = 0;
+        }
 
-        if (x > gl.getRunwayPosition()[0]) {
+        if (x / gl.getZoom() > gl.getRunwayPosition()[0]) {
             headingCommand = 355;
         }
-        if (x < gl.getRunwayPosition()[0]) {
+        if (x / gl.getZoom() < gl.getRunwayPosition()[0]) {
             headingCommand = 5;
         }
-        if (x == gl.getRunwayPosition()[0]) {
+        if (x / gl.getZoom() == gl.getRunwayPosition()[0]) {
             headingCommand = 0;
         }
         if (altitude > 0) {
@@ -144,51 +162,83 @@ public class Aircraft {
     }
 
     private void updatePosition() {
-        x += headingXYValues[heading][0] * speed;
-        y += headingXYValues[heading][1] * speed;
+        x += headingXYValues[heading][0] * speed / 10;
+        y += headingXYValues[heading][1] * speed / 10;
     }
 
     private void updateAltitude() {
-        if (altitude < altitudeCommand) {
-            altitude++;
-        }
-        if (altitude > altitudeCommand) {
-            altitude--;
+        if (mode != 1) {
+            if (altitude < altitudeCommand) {
+                altitude++;
+            }
+            if (altitude > altitudeCommand) {
+                altitude--;
+            }
+        } else {
+            if (altitude > altitudeCommand) {
+                slowDescendValue++;
+                if (slowDescendValue >= 7) {
+                    altitude--;
+                    slowDescendValue = 0;
+                }
+            }
         }
     }
 
     private void updateSpeed() {
-        if (speed < speedCommand) {
+        if (speed + 10 < speedCommand) {
+            speed += 5;
+        } else if (speed < speedCommand) {
             speed++;
         }
-        if (speed > speedCommand) {
+        if (speed - 10 > speedCommand) {
+            speed -= 5;
+        } else if (speed > speedCommand) {
             speed--;
         }
     }
 
-    private void updateHeading() {//tätä pitää vielä kehittää
+    private void updateHeading() {
+        int turningSpeed = 3;
         if (heading < headingCommand) {
-            if (heading + 10 > 359) {
-                heading = headingCommand;
-            } else {
-                heading = heading + 10;
-            }
-
+            headingCommandIsBiggerThanHeading(turningSpeed);
         }
         if (heading > headingCommand) {
-            if (heading - 10 < 0) {
+            headingCommandIsSmallerThanHeading(turningSpeed);
+        }
+    }
+
+    private void headingCommandIsSmallerThanHeading(int turningSpeed) {
+        if (360 + headingCommand - heading < heading - headingCommand) {//jos lyhyempi matka nollakohdan yli myötäpäivään
+            heading += turningSpeed;
+            if (heading > 359) {//jos menee nollakohdan yli
+                heading -= 360;
+                if (heading > headingCommand) {//jos menee headingCommandin yli
+                    heading = headingCommand;
+                }
+            }
+        } else {
+            heading -= turningSpeed;
+            if (heading < headingCommand) {//jos menee headingCommandin yli
                 heading = headingCommand;
-            } else {
-                heading = heading - 10;
             }
         }
+    }
 
-        //varmistus:
-        while (heading < 0) {
-            heading += 360;
-        }
-        while (heading > 359) {
-            heading -= 360;
+    private void headingCommandIsBiggerThanHeading(int turningSpeed) {
+        if (headingCommand - heading > 360 + heading - headingCommand) {//jos lyhyempi matka nollakohdan yli vastapäivään
+            heading -= turningSpeed;
+            if (heading < 0) {//jos menee nollakohdan yli
+                heading += 360;
+                if (heading < headingCommand) {//jos menee headingCommandin yli
+                    heading = headingCommand;
+                }
+            }
+        } else {
+            heading += turningSpeed;
+            if (heading > headingCommand) {//jos menee headingCommandin yli
+                heading = headingCommand;
+            }
         }
     }
 
@@ -196,7 +246,7 @@ public class Aircraft {
         x = random.nextInt(300000) + 200000;
         y = random.nextInt(300000) + 200000;
         altitude = random.nextInt(50) + 30;
-        speed = random.nextInt(40) + 16;
+        speed = random.nextInt(400) + 160;
         heading = random.nextInt(360);
         altitudeCommand = altitude;
         speedCommand = speed;
