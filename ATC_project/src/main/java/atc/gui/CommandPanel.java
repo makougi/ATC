@@ -23,8 +23,11 @@ public class CommandPanel extends JPanel {
     private Color color;
     private Boolean invalidCommand;
     private String infoText;
+    private Boolean gameOn;
+    private String[] info;
 
     public CommandPanel(GameLogic gl, Color cl, int ph) {
+        gameOn = true;
         infoText = "";
         invalidCommand = false;
         color = cl;
@@ -34,16 +37,22 @@ public class CommandPanel extends JPanel {
         panelWidth = panelHeight;
 
         stringY = panelHeight / 8;
-        stringX = stringY/2;
+        stringX = stringY / 2;
 
         rowLength = panelWidth / 10;
         stringQueue = new ArrayDeque();
         stringQueue.add("");
 
-        font = new Font("Arial", Font.BOLD, 12);
+        font = new Font("Arial", Font.PLAIN, 12);
 
         initGamePanel();
         gl.getCommandParser().setCommandPanel(this);
+    }
+
+    public void gameOver(String[] s) {
+        info = s;
+        gameOn = false;
+        this.repaint();
     }
 
     public void invalidCommand() {
@@ -58,57 +67,81 @@ public class CommandPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawText(g);
-        drawInfoText(g);
+        if (gameOn) {
+            drawText(g);
+            drawInfoText(g);
+        } else {
+            drawGameOver(g);
+        }
+    }
 
+    private void drawGameOver(Graphics g) {
+        g.drawString("GAME OVER", 10, 20);
+        g.drawString("Two aircrafts too close", 10, 40);
+        g.drawString(info[0]+" and "+info[6], 10, 60);
+        g.drawString("X: "+info[1]+" | "+info[7], 10, 60);
+        g.drawString("Y: "+info[2]+" | "+info[8], 10, 80);
+        g.drawString("Altitude: "+info[3]+" | "+info[9], 10, 100);
+        g.drawString("Heading: "+info[4]+" | "+info[10], 10, 120);
+        g.drawString("Speed: "+info[5]+" | "+info[11], 10, 140);
     }
 
     private void drawText(Graphics g) {
-        int rowHeight = 0;
-        g.setFont(font);
-        for (String s : stringQueue) {
-            g.drawString(s, stringX, stringY + rowHeight);
-            rowHeight += 20;
+        if (gameOn) {
+            int rowHeight = 0;
+            g.setFont(font);
+            for (String s : stringQueue) {
+                g.drawString(s, stringX, stringY + rowHeight);
+                rowHeight += 20;
+            }
         }
     }
 
     private void drawInfoText(Graphics g) {
-        g.setFont(font);
-        g.drawString(infoText, stringX, stringY);
+        if (gameOn) {
+            g.setFont(font);
+            g.drawString(infoText, stringX, stringY);
+        }
     }
 
     public void keybEnter() {
-        stringQueue.clear();
-        stringQueue.add("");
-        this.repaint();
+        if (gameOn) {
+            stringQueue.clear();
+            stringQueue.add("");
+            this.repaint();
+        }
     }
 
     public void keybBackspace() {
-        if (stringQueue.size() == 1 && stringQueue.peekFirst().length() == 0) {//if empty
-            //do nothing
-        } else if (stringQueue.size() == 1 && stringQueue.peekFirst().length() == 1) {
-            stringQueue.clear();
-            stringQueue.add("");
-        } else if (stringQueue.peekLast().length() == 1) {
-            stringQueue.removeLast();
-        } else {
-            String s = stringQueue.peekLast().substring(0, stringQueue.peekLast().length() - 1);
-            stringQueue.removeLast();
-            stringQueue.add(s);
+        if (gameOn) {
+            if (stringQueue.size() == 1 && stringQueue.peekFirst().length() == 0) {//if empty
+                //do nothing
+            } else if (stringQueue.size() == 1 && stringQueue.peekFirst().length() == 1) {
+                stringQueue.clear();
+                stringQueue.add("");
+            } else if (stringQueue.peekLast().length() == 1) {
+                stringQueue.removeLast();
+            } else {
+                String s = stringQueue.peekLast().substring(0, stringQueue.peekLast().length() - 1);
+                stringQueue.removeLast();
+                stringQueue.add(s);
+            }
+            this.repaint();
         }
-        this.repaint();
     }
 
     public void keybCharacter(char c) {
-        if (infoText.length() != 0) {
-            infoText = "";
-        }
-        if (stringQueue.peekLast().length() >= rowLength) {
-            stringQueue.add("" + c);
-        } else {
-            String s = stringQueue.removeLast() + c;
-            stringQueue.add(s);
-            this.repaint();
+        if (gameOn) {
+            if (infoText.length() != 0) {
+                infoText = "";
+            }
+            if (stringQueue.peekLast().length() >= rowLength) {
+                stringQueue.add("" + c);
+            } else {
+                String s = stringQueue.removeLast() + c;
+                stringQueue.add(s);
+                this.repaint();
+            }
         }
     }
 }

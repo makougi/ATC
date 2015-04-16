@@ -2,6 +2,7 @@ package atc.main;
 
 import atc.gui.*;
 import atc.logic.*;
+import java.util.Random;
 
 public class Timer {
 
@@ -13,6 +14,9 @@ public class Timer {
     int clockATop;
     int clockB;
     int clockBTop;
+    int clockC;
+    int clockCTop;
+    Boolean gameOn;
 
     public Timer(GUIFrame gf, GameLogic gl) {
         guiFrame = gf;
@@ -22,11 +26,18 @@ public class Timer {
         clockATop = 100;
         clockB = 0;
         clockBTop = 100;
+        clockC = 0;
+        clockCTop = 100;
+        gameOn = true;
+        gl.setTimer(this);
         timerLoop();
     }
-
+    public void stop(){
+        gameOn = false;
+    }
+    
     public void timerLoop() {
-        while (true) {
+        while (gameOn) {
             timeA = System.currentTimeMillis() + timeLength;
             while (System.currentTimeMillis() < timeA) {
             }
@@ -37,14 +48,19 @@ public class Timer {
     private void tick() {
         clockA++;
         clockB++;
+        clockC++;
         if (clockA >= clockATop) {
             guiFrame.updateRadarPanel();
-            guiFrame.updateInfoPanel();
+            guiFrame.updateInfoPanel1();
             clockA = 0;
         }
         if (clockB >= clockBTop) {
             gameLogic.update();
             clockB = 0;
+        }
+        if (clockC >= clockCTop){
+            gameLogic.updateScheduleClock();
+            clockC = 0;
         }
     }
 }

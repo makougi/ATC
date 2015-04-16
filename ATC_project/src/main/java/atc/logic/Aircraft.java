@@ -21,15 +21,22 @@ public class Aircraft {
     private int mode;
     private GameLogic gl;
 
-    public Aircraft(GameLogic gameLogic) {
+    public Aircraft(GameLogic gameLogic, String id, int initialX, int initialY, int initialAltitude, int initialHeading, int initialSpeed) {
+        x = initialX;
+        y = initialY;
+        altitude = initialAltitude;
+        heading = initialHeading;
+        speed = initialSpeed;
+        altitudeCommand = altitude;
+        headingCommand = heading;
+        speedCommand = speed;
         gl = gameLogic;
         mode = 0;//mode 0 normal, mode 1 landing
         historyLength = 10;
         history = new int[historyLength][2];//recent x&y positions
         random = new Random();
-        identifier = Values.createIdentifier(gl);
+        identifier = id;
         headingXYValues = Values.getHeadingXYValues();
-        setupInitialValues();
         slowDescendValue = 0;
     }
 
@@ -102,7 +109,8 @@ public class Aircraft {
     public int getHeading() {
         return heading;
     }
-        public int getZCommand() {
+
+    public int getZCommand() {
         return altitudeCommand;
     }
 
@@ -116,7 +124,8 @@ public class Aircraft {
 
     public void update() {
         if (speed == 0) {
-            gl.removeAircraft(this);
+            mode = 2;
+            gl.landed(this);
             return;
         }
         if (mode == 1) {//if landing
@@ -177,7 +186,7 @@ public class Aircraft {
         } else {
             if (altitude > altitudeCommand) {
                 slowDescendValue++;
-                if (slowDescendValue >= 7) {
+                if (slowDescendValue >= 4) {
                     altitude--;
                     slowDescendValue = 0;
                 }
@@ -240,16 +249,5 @@ public class Aircraft {
                 heading = headingCommand;
             }
         }
-    }
-
-    private void setupInitialValues() {
-        x = random.nextInt(300000) + 200000;
-        y = random.nextInt(300000) + 200000;
-        altitude = random.nextInt(50) + 30;
-        speed = random.nextInt(400) + 160;
-        heading = random.nextInt(360);
-        altitudeCommand = altitude;
-        speedCommand = speed;
-        headingCommand = heading;
     }
 }

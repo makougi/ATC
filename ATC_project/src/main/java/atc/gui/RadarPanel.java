@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class RadarPanel extends JPanel {
 
@@ -43,13 +44,13 @@ public class RadarPanel extends JPanel {
         imageSize = 4;
         zoom = gl.getZoom();
         fontScale = 4;
-
         initGamePanel();
     }
 
     private void initGamePanel() {
         loadImage();
         setPreferredSize(new Dimension(panelWidth, panelHeight));
+        gl.setRadarPanel(this);
         setBackground(Color.black);
     }
 
@@ -79,7 +80,10 @@ public class RadarPanel extends JPanel {
     }
 
     private void drawAircrafts(Graphics g) {
-        for (Aircraft a : aircrafts) {
+        for (Aircraft a : aircrafts){
+//        for (Iterator<Aircraft> it = aircrafts.iterator(); it.hasNext();){
+//            Aircraft a = it.next();
+
             aX = a.getX() / zoom;
             aY = a.getY() / zoom;
             aZ = a.getZ();

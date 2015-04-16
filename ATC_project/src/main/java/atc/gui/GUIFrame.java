@@ -1,5 +1,6 @@
 package atc.gui;
 
+import atc.logic.Aircraft;
 import javax.swing.JFrame;
 import atc.logic.GameLogic;
 import java.awt.Color;
@@ -12,13 +13,14 @@ public class GUIFrame extends JFrame {
     RadarPanel radarPanel;
     ContainerPanel containerPanel;
     CommandPanel commandPanel;
-    InfoPanel infoPanel1;
-    InfoPanel infoPanel2;
+    InfoPanel1 infoPanel1;
+    InfoPanel2 infoPanel2;
     KeyboardListener keyboardListener;
     int panelHeight;
+    Aircraft[] aircraftsTooClose;
 
     public GUIFrame(GameLogic gl) {
-        panelHeight = Toolkit.getDefaultToolkit().getScreenSize().height-200;
+        panelHeight = Toolkit.getDefaultToolkit().getScreenSize().height-400;
         
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -29,11 +31,11 @@ public class GUIFrame extends JFrame {
         containerPanel = new ContainerPanel(gl,Color.gray,panelHeight);
         add(containerPanel);
 
-        infoPanel1 = new InfoPanel(gl,Color.lightGray,panelHeight);
-        containerPanel.add(infoPanel1);
-
-        infoPanel2 = new InfoPanel(gl,Color.lightGray,panelHeight);
+        infoPanel2 = new InfoPanel2(gl,Color.lightGray,panelHeight);
         containerPanel.add(infoPanel2);
+
+        infoPanel1 = new InfoPanel1(gl,Color.lightGray,panelHeight);
+        containerPanel.add(infoPanel1);
 
         commandPanel = new CommandPanel(gl,Color.lightGray,panelHeight);
         containerPanel.add(commandPanel);
@@ -45,8 +47,17 @@ public class GUIFrame extends JFrame {
         setTitle("ATC");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        
+        gl.setGUIFrame(this);
     }
-    public void updateInfoPanel(){
+    public void gameOver(String[] s){
+        commandPanel.gameOver(s);
+    }
+    
+    public void updateInfoPanel2(){
+        infoPanel2.drawUpdate();
+    }
+    public void updateInfoPanel1(){
         infoPanel1.drawUpdate();
     }
 

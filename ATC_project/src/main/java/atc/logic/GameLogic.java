@@ -1,63 +1,176 @@
 package atc.logic;
 
+import atc.gui.GUIFrame;
+import atc.gui.InfoPanel2;
+import atc.gui.RadarPanel;
+import atc.main.Timer;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public class GameLogic {
 
     private Aircraft aircraft;
     private ArrayList<Aircraft> aircrafts;
+    private int scheduleClock;
+    private ArrayDeque<int[]> schedule;
+    private int timeOfNextScheduleEntry;
+    private int scheduleScope;
+    private int averageFrequency;
     private CommandParser commandParser;
     private int zoom;
     private int[] runwayPosition = {300, 300};
-
-    ;
+    private int landed;
+    private int lost;
+    private Random random;
+    private RadarPanel radarPanel;
+    private GUIFrame guiFrame;
+    private ArrayList<String> allIdentifiers;
+    private ArrayList<Aircraft> removeList;
+    private HashMap<int[], Aircraft> positionMap;
+    private Aircraft[] tooClose;
+    private Timer timer;
 
     public GameLogic() {
+        removeList = new ArrayList();
+        allIdentifiers = new ArrayList();
+        scheduleScope = 5;//seconds that the schedule shows in to the future
+        averageFrequency = 2;//new flight every x seconds in average
+        random = new Random();
+        schedule = new ArrayDeque<int[]>();
+        scheduleClock = 0;
+        timeOfNextScheduleEntry = random.nextInt(2) + 3;
         zoom = 1000;
         aircrafts = new ArrayList();
-
-        for (int i = 0; i < 1; i++) {
-            aircrafts.add(new Aircraft(this));
-        }
         commandParser = new CommandParser(this);
+    }
+    public void setTimer(Timer t){
+        timer = t;
+    }
+    private void gameOver(){
+        timer.stop();
+        String[] info = {tooClose[0].getIdentifier(),
+            ""+tooClose[0].getX()/10000,
+            ""+tooClose[0].getY()/10000,
+            ""+tooClose[0].getZ(),
+            ""+tooClose[0].getHeading(),
+            ""+tooClose[0].getSpeed(),
+            tooClose[1].getIdentifier(),
+            ""+tooClose[1].getX()/10000,
+            ""+tooClose[1].getY()/10000,
+            ""+tooClose[1].getZ(),
+            ""+tooClose[1].getHeading(),
+            ""+tooClose[1].getSpeed()};
+        guiFrame.gameOver(info);
+    }
+
+    public int getLost() {
+        return lost;
+    }
+
+    public int getLanded() {
+        return landed;
+    }
+
+    public String getIdentifier(int i) {
+        return allIdentifiers.get(i);
+    }
+
+    public ArrayDeque<int[]> getSchedule() {
+        return schedule;
+    }
+
+    public void setGUIFrame(GUIFrame gf) {
+        guiFrame = gf;
+    }
+
+    public int getScheduleClock() {
+        return scheduleClock;
+    }
+
+    public void setRadarPanel(RadarPanel rp) {
+        radarPanel = rp;
+    }
+
+    private void addNewAircraft() {
+        int x;
+        int y;
+        int z = schedule.peekFirst()[3];
+        int heading;
+        int speed = random.nextInt(200) + 220;
+
+        if (schedule.peekFirst()[2] == 0) {
+            x = radarPanel.getSize().width * 1 / 20 * zoom;
+            y = radarPanel.getSize().height * 1 / 20 * zoom;
+            heading = 90;
+        } else if (schedule.peekFirst()[2] == 1) {
+            x = radarPanel.getSize().width * 15 / 20 * zoom;
+            y = radarPanel.getSize().height * 1 / 20 * zoom;
+            heading = 180;
+        } else if (schedule.peekFirst()[2] == 2) {
+            x = radarPanel.getSize().width * 19 / 20 * zoom;
+            y = radarPanel.getSize().height * 10 / 20 * zoom;
+            heading = 270;
+        } else {
+            x = radarPanel.getSize().width * 1 / 20 * zoom;
+            y = radarPanel.getSize().height * 19 / 20 * zoom;
+            heading = 90;
+        }
+        aircrafts.add(new Aircraft(this, allIdentifiers.get(schedule.peekFirst()[0]), x, y, z, heading, speed));
+    }
+
+    private void scheduleNewFlight() {
+        allIdentifiers.add(Values.createIdentifier(this));
+        int[] flight = new int[4];
+        flight[0] = allIdentifiers.size() - 1;
+        flight[1] = scheduleScope + scheduleClock;//time when aircraft enters radar
+        flight[2] = random.nextInt(4);//place of entry
+        flight[3] = random.nextInt(100) + 50;//initial altitude
+        for (int[] f : schedule) {
+            if (flight[2] == f[2] && (flight[3] < f[3] + 10 && flight[3] > f[3] - 10)) {//jos lentokone tulisi liian lähelle toista lentokonetta
+                return;//älä luo lentoa
+            }
+        }
+        schedule.add(flight);
+    }
+
+    public void updateScheduleClock() {
+        scheduleClock++;
+
+        if (scheduleClock == timeOfNextScheduleEntry) {
+            scheduleNewFlight();
+            timeOfNextScheduleEntry += random.nextInt(averageFrequency * 2) + 1;
+        }
+        if (!schedule.isEmpty()) {
+            if (schedule.peekFirst()[1] == scheduleClock) {
+                addNewAircraft();
+                schedule.pollFirst();
+            }
+        }
+        guiFrame.updateInfoPanel2();
+    }
+
+    private boolean AircraftsTooClose(Aircraft a) {
+        int[] xyz = {a.getX(), a.getY(), a.getZ()};
+        if (positionMap.containsKey(xyz)) {
+            if (positionMap.get(xyz).getX() == a.getX() && positionMap.get(xyz).getY() == a.getY() && positionMap.get(xyz).getZ() == a.getZ()) {//varmistetaan, että todella samat arvot eikä vain sama hash-koodi
+                Aircraft[] aircraftsTooClose = {positionMap.get(xyz), a};
+                return true;
+            }
+        }
+        positionMap.put(xyz, a);
+        return false;
+    }
+
+    private void checkIfOutside(Aircraft a) {
+        if (a.getX() < 0 || a.getX() > guiFrame.getSize().width * zoom || a.getY() < 0 || a.getY() > guiFrame.getSize().height * zoom) {
+            lost++;
+            removeList.add(a);
+        }
     }
 
     private void checkIfGoodForLanding(Aircraft a) {
-//        System.out.println("X " + a.getX() / zoom);
-//        System.out.println("pitää olla > " + (runwayPosition[0] - (25000 / zoom)));
-//        System.out.println("pitää olla < " + (runwayPosition[0] + (25000 / zoom)));
-//        System.out.println("Y " + a.getY() / zoom);
-//        System.out.println("pitää olla > " + (runwayPosition[1] + (100000 / zoom)));
-//        System.out.println("pitää olla < " + (runwayPosition[1] + (200000 / zoom)));
-//        System.out.println("Heading " + a.getHeading());
-//        System.out.println("pitää olla >= 350");
-//        System.out.println("pitää olla <= 10");
-//        System.out.println("Speed " + a.getSpeed());
-//        System.out.println("pitää olla <= 240");
-//        System.out.println("Altitude " + a.getZ());
-//        System.out.println("pitää olla <= 20");
-//        System.out.println("mode: " + a.getMode());
-//        System.out.println("--------------------");
-//
-//        if (a.getX() / zoom > runwayPosition[0] - (25000 / zoom)) {System.out.println("1/8 ok");
-//            if (a.getX() / zoom < runwayPosition[0] + (25000 / zoom)) {System.out.println("2/8 ok");
-//                if (a.getY() / zoom > runwayPosition[1] + (100000 / zoom)) {System.out.println("3/8 ok");
-//                    if (a.getY() / zoom < runwayPosition[1] + (200000 / zoom)) {System.out.println("4/8 ok");
-//                        if (a.getHeading() >= 350) {System.out.println("5/8 ok");
-//                            if (a.getHeading() <= 10) {System.out.println("6/8 ok");
-//                                if (a.getSpeed() <= 240) {System.out.println("7/8 ok");
-//                                    if (a.getZ() <= 20) {System.out.println("8/8 ok");
-//                                        a.setMode(1);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        System.out.println("-------------------------------------------------");
-
         if (a.getX() / zoom > runwayPosition[0] - (25000 / zoom)
                 && a.getX() / zoom < runwayPosition[0] + (25000 / zoom)
                 && a.getY() / zoom > runwayPosition[1] + (100000 / zoom)
@@ -67,11 +180,11 @@ public class GameLogic {
                 && a.getZ() <= 20) {
             a.setMode(1);
         }
-
     }
 
-    public void removeAircraft(Aircraft a) {
-        aircrafts.remove(a);
+    public void landed(Aircraft a) {
+        landed++;
+        removeList.add(a);
     }
 
     public int getZoom() {
@@ -91,12 +204,21 @@ public class GameLogic {
     }
 
     private void updateAircrafts() {
+        positionMap.clear();
         for (Aircraft a : aircrafts) {
             if (a.getMode() != 1) {
                 checkIfGoodForLanding(a);
+                checkIfOutside(a);
+                if (AircraftsTooClose(a)) {
+                    gameOver();
+                }
             }
             a.update();
         }
+        for (Aircraft a : removeList) {
+            aircrafts.remove(a);
+        }
+        removeList.clear();
     }
 
     public ArrayList<Aircraft> getAircrafts() {

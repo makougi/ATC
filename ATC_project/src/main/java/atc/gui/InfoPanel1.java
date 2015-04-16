@@ -10,7 +10,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 
-public class InfoPanel extends JPanel {
+public class InfoPanel1 extends JPanel {
 
     GameLogic gl;
     Aircraft a;
@@ -18,8 +18,8 @@ public class InfoPanel extends JPanel {
     private int panelHeight;
     private Font font;
 
-    public InfoPanel(GameLogic gameLogic, Color c, int ph) {
-        font = new Font("Arial", Font.BOLD, 14);
+    public InfoPanel1(GameLogic gameLogic, Color c, int ph) {
+        font = new Font("Arial", Font.PLAIN, 12);
         gl = gameLogic;
 
         panelHeight = ph / 3;
@@ -47,14 +47,21 @@ public class InfoPanel extends JPanel {
         int rowHeight = 20;
         if (a != null) {
             drawIdentifier(g, textX, textY, rowHeight);
-            drawSpeed(g, textX, textY, rowHeight);
-            drawHeading(g, textX, textY, rowHeight);
-            drawAltitude(g, textX, textY, rowHeight);
+            if (a.getMode() != 2) {
+                drawSpeed(g, textX, textY, rowHeight);
+                drawHeading(g, textX, textY, rowHeight);
+                drawAltitude(g, textX, textY, rowHeight);
+                if (a.getMode() == 1) {
+                    drawLanding(g, textX, textY, rowHeight);
+                }
+            } else {
+                drawLanded(g, textX, textY, rowHeight);
+            }
         }
     }
 
     private void drawIdentifier(Graphics g, int textX, int textY, int rowHeight) {
-        g.drawString(("Identifier: "+a.getIdentifier()).toUpperCase(), textX, textY + (rowHeight * 0));
+        g.drawString(("Identifier: " + a.getIdentifier()).toUpperCase(), textX, textY + (rowHeight * 0));
     }
 
     private void drawSpeed(Graphics g, int textX, int textY, int rowHeight) {
@@ -66,22 +73,28 @@ public class InfoPanel extends JPanel {
     }
 
     private void drawHeading(Graphics g, int textX, int textY, int rowHeight) {
-        if (a.getHeading() != a.getHeadingCommand()) {
-            if (a.getHeading() >= 100) {
-                g.drawString(("Heading: " + a.getHeading() + " >>> " + a.getHeadingCommand()).toUpperCase(), textX, textY + (rowHeight * 2));
-            } else if (a.getHeading() >= 10) {
-                g.drawString(("Heading: 0" + a.getHeading() + " >>> 0" + a.getHeadingCommand()).toUpperCase(), textX, textY + (rowHeight * 2));
-            } else {
-                g.drawString(("Heading: 00" + a.getHeading() + " >>> 00" + a.getHeadingCommand()).toUpperCase(), textX, textY + (rowHeight * 2));
-            }
+        int h = a.getHeading();
+        int hc = a.getHeadingCommand();
+        String heading;
+        String headingCommand;
+        if (h >= 100) {
+            heading = "" + h;
+        } else if (h >= 10) {
+            heading = "0" + h;
         } else {
-            if (a.getHeading() >= 100) {
-                g.drawString(("Heading: " + a.getHeading() + " = " + a.getHeadingCommand()).toUpperCase(), textX, textY + (rowHeight * 2));
-            } else if (a.getHeading() >= 10) {
-                g.drawString(("Heading: 0" + a.getHeading() + " = 0" + a.getHeadingCommand()).toUpperCase(), textX, textY + (rowHeight * 2));
-            } else {
-                g.drawString(("Heading: 00" + a.getHeading() + " = 00" + a.getHeadingCommand()).toUpperCase(), textX, textY + (rowHeight * 2));
-            }
+            heading = "00" + h;
+        }
+        if (hc >= 100) {
+            headingCommand = "" + hc;
+        } else if (hc >= 10) {
+            headingCommand = "0" + hc;
+        } else {
+            headingCommand = "00" + hc;
+        }
+        if (h == hc) {
+            g.drawString(("Heading: " + h + " = " + hc).toUpperCase(), textX, textY + (rowHeight * 2));
+        } else {
+            g.drawString(("Heading: " + h + " >>> " + hc).toUpperCase(), textX, textY + (rowHeight * 2));
         }
     }
 
@@ -91,6 +104,14 @@ public class InfoPanel extends JPanel {
         } else {
             g.drawString(("Altitude: FL" + a.getZ() + " = FL" + a.getZCommand()).toUpperCase(), textX, textY + (fontHeight * 3));
         }
+    }
+
+    private void drawLanding(Graphics g, int textX, int textY, int fontHeight) {
+        g.drawString("--LANDING--", textX, textY + (fontHeight * 4));
+    }
+
+    private void drawLanded(Graphics g, int textX, int textY, int fontHeight) {
+        g.drawString("LANDED", textX, textY + (fontHeight * 1));
     }
 
     public void drawUpdate() {
