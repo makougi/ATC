@@ -34,7 +34,7 @@ public class CommandPanel extends JPanel {
         gameLogic = gl;
 
         panelHeight = ph / 3;
-        panelWidth = panelHeight;
+        panelWidth = ph / 3;
 
         stringY = panelHeight / 8;
         stringX = stringY / 2;
@@ -76,14 +76,16 @@ public class CommandPanel extends JPanel {
     }
 
     private void drawGameOver(Graphics g) {
+        font = new Font("Arial", Font.BOLD, 11);
+        g.setFont(font);
         g.drawString("GAME OVER", 10, 20);
         g.drawString("Two aircrafts too close", 10, 40);
         g.drawString(info[0]+" and "+info[6], 10, 60);
-        g.drawString("X: "+info[1]+" | "+info[7], 10, 60);
-        g.drawString("Y: "+info[2]+" | "+info[8], 10, 80);
-        g.drawString("Altitude: "+info[3]+" | "+info[9], 10, 100);
-        g.drawString("Heading: "+info[4]+" | "+info[10], 10, 120);
-        g.drawString("Speed: "+info[5]+" | "+info[11], 10, 140);
+        g.drawString("X: "+info[1]+" | "+info[7], 10, 80);
+        g.drawString("Y: "+info[2]+" | "+info[8], 10, 100);
+        g.drawString("Altitude: "+info[3]+" | "+info[9], 10, 120);
+        g.drawString("Heading: "+info[4]+" | "+info[10], 10, 140);
+        g.drawString("Speed: "+info[5]+" | "+info[11], 10, 160);
     }
 
     private void drawText(Graphics g) {

@@ -17,6 +17,7 @@ public class GameLogic {
     private ArrayDeque<int[]> schedule;
     private int timeOfNextScheduleEntry;
     private int scheduleScope;
+    private int scheduleScopeTop;
     private int averageFrequency;
     private CommandParser commandParser;
     private int zoom;
@@ -28,40 +29,45 @@ public class GameLogic {
     private GUIFrame guiFrame;
     private ArrayList<String> allIdentifiers;
     private ArrayList<Aircraft> removeList;
-    private HashMap<int[], Aircraft> positionMap;
+    private HashMap<Integer, Aircraft> positionMap;
     private Aircraft[] tooClose;
     private Timer timer;
 
     public GameLogic() {
+        tooClose = new Aircraft[2];
+        positionMap = new HashMap();
         removeList = new ArrayList();
         allIdentifiers = new ArrayList();
-        scheduleScope = 5;//seconds that the schedule shows in to the future
-        averageFrequency = 2;//new flight every x seconds in average
+        scheduleScope = 0;
+        scheduleScopeTop = 300;//seconds that the schedule shows in to the future
+        averageFrequency = 30;//new flight every x seconds in average
         random = new Random();
         schedule = new ArrayDeque<int[]>();
         scheduleClock = 0;
-        timeOfNextScheduleEntry = random.nextInt(2) + 3;
+        timeOfNextScheduleEntry = random.nextInt(4) + 5;
         zoom = 1000;
         aircrafts = new ArrayList();
         commandParser = new CommandParser(this);
     }
-    public void setTimer(Timer t){
+
+    public void setTimer(Timer t) {
         timer = t;
     }
-    private void gameOver(){
+
+    private void gameOver() {
         timer.stop();
         String[] info = {tooClose[0].getIdentifier(),
-            ""+tooClose[0].getX()/10000,
-            ""+tooClose[0].getY()/10000,
-            ""+tooClose[0].getZ(),
-            ""+tooClose[0].getHeading(),
-            ""+tooClose[0].getSpeed(),
+            "" + tooClose[0].getX() / 10000,
+            "" + tooClose[0].getY() / 10000,
+            "" + tooClose[0].getZ(),
+            "" + tooClose[0].getHeading(),
+            "" + tooClose[0].getSpeed(),
             tooClose[1].getIdentifier(),
-            ""+tooClose[1].getX()/10000,
-            ""+tooClose[1].getY()/10000,
-            ""+tooClose[1].getZ(),
-            ""+tooClose[1].getHeading(),
-            ""+tooClose[1].getSpeed()};
+            "" + tooClose[1].getX() / 10000,
+            "" + tooClose[1].getY() / 10000,
+            "" + tooClose[1].getZ(),
+            "" + tooClose[1].getHeading(),
+            "" + tooClose[1].getSpeed()};
         guiFrame.gameOver(info);
     }
 
@@ -114,7 +120,7 @@ public class GameLogic {
             heading = 270;
         } else {
             x = radarPanel.getSize().width * 1 / 20 * zoom;
-            y = radarPanel.getSize().height * 19 / 20 * zoom;
+            y = radarPanel.getSize().height * 18 / 20 * zoom;
             heading = 90;
         }
         aircrafts.add(new Aircraft(this, allIdentifiers.get(schedule.peekFirst()[0]), x, y, z, heading, speed));
@@ -137,6 +143,10 @@ public class GameLogic {
 
     public void updateScheduleClock() {
         scheduleClock++;
+        
+        if (scheduleScope < scheduleScopeTop) {
+            scheduleScope++;
+        }
 
         if (scheduleClock == timeOfNextScheduleEntry) {
             scheduleNewFlight();
@@ -152,10 +162,15 @@ public class GameLogic {
     }
 
     private boolean AircraftsTooClose(Aircraft a) {
-        int[] xyz = {a.getX(), a.getY(), a.getZ()};
+        int divider = 10000;
+        int differenceXY = 2;
+        int xyz = a.getX() / 100000 + a.getY() / 100000;
         if (positionMap.containsKey(xyz)) {
-            if (positionMap.get(xyz).getX() == a.getX() && positionMap.get(xyz).getY() == a.getY() && positionMap.get(xyz).getZ() == a.getZ()) {//varmistetaan, että todella samat arvot eikä vain sama hash-koodi
-                Aircraft[] aircraftsTooClose = {positionMap.get(xyz), a};
+            if (positionMap.get(xyz).getX() / divider > (a.getX() / divider) - differenceXY && positionMap.get(xyz).getX() / divider < (a.getX() / divider) + differenceXY
+                    && positionMap.get(xyz).getY() / divider > (a.getY() / divider) - differenceXY && positionMap.get(xyz).getY() / divider < (a.getY() / divider) + differenceXY
+                    && (positionMap.get(xyz).getZ() < (a.getZ() + 10) && positionMap.get(xyz).getZ() > (a.getZ() - 10))) {//varmistetaan, että lentokoneet ovat lähekkäin eikä vain sama hash-koodi
+                tooClose[0] = positionMap.get(xyz);
+                tooClose[1] = a;
                 return true;
             }
         }
@@ -164,7 +179,10 @@ public class GameLogic {
     }
 
     private void checkIfOutside(Aircraft a) {
-        if (a.getX() < 0 || a.getX() > guiFrame.getSize().width * zoom || a.getY() < 0 || a.getY() > guiFrame.getSize().height * zoom) {
+        if (a.getX() < 0
+                || a.getX() > guiFrame.getSize().height * zoom
+                || a.getY() < 0
+                || a.getY() > guiFrame.getSize().height * zoom) {
             lost++;
             removeList.add(a);
         }
@@ -209,9 +227,9 @@ public class GameLogic {
             if (a.getMode() != 1) {
                 checkIfGoodForLanding(a);
                 checkIfOutside(a);
-                if (AircraftsTooClose(a)) {
-                    gameOver();
-                }
+            }
+            if (AircraftsTooClose(a)) {
+                gameOver();
             }
             a.update();
         }

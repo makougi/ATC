@@ -17,15 +17,21 @@ public class InfoPanel1 extends JPanel {
     private int panelWidth;
     private int panelHeight;
     private Font font;
+    private int mode;
 
     public InfoPanel1(GameLogic gameLogic, Color c, int ph) {
+        mode = 0;
         font = new Font("Arial", Font.PLAIN, 12);
         gl = gameLogic;
 
         panelHeight = ph / 3;
-        panelWidth = panelHeight;
+        panelWidth = ph / 3;
 
         initGamePanel(c);
+    }
+
+    public void setMode(int i) {
+        mode = i;
     }
 
     private void initGamePanel(Color c) {
@@ -36,10 +42,33 @@ public class InfoPanel1 extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawSomething(g);
+        if (mode == 0) {
+            drawAircraftInfo(g);
+        } else {
+            drawListAll(g);
+        }
+
     }
 
-    private void drawSomething(Graphics g) {
+    private void drawListAll(Graphics g) {
+        Font font2 = new Font("Courier", Font.BOLD, 10);
+        g.setFont(font2);
+        int row = 0;
+        int column = 0;
+        int height = 16;
+        g.drawString("AIRCRAFTS ON THE SCREEN", 10, 20);
+        for (Aircraft a : gl.getAircrafts()) {
+            g.drawString(a.getIdentifier() + " x" + a.getX() / 10000 + " y" + a.getY() / 10000, 10 + column, 36 + row);
+            if (column == 0) {
+                column = 100;
+            } else {
+                column = 0;
+                row += height;
+            }
+        }
+    }
+
+    private void drawAircraftInfo(Graphics g) {
         g.setFont(font);
         a = gl.getCommandParser().getAircraft();
         int textX = 10;
@@ -92,9 +121,9 @@ public class InfoPanel1 extends JPanel {
             headingCommand = "00" + hc;
         }
         if (h == hc) {
-            g.drawString(("Heading: " + h + " = " + hc).toUpperCase(), textX, textY + (rowHeight * 2));
+            g.drawString(("Heading: " + heading + " = " + headingCommand).toUpperCase(), textX, textY + (rowHeight * 2));
         } else {
-            g.drawString(("Heading: " + h + " >>> " + hc).toUpperCase(), textX, textY + (rowHeight * 2));
+            g.drawString(("Heading: " + heading + " >>> " + headingCommand).toUpperCase(), textX, textY + (rowHeight * 2));
         }
     }
 

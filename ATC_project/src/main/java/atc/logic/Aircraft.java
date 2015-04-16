@@ -50,7 +50,7 @@ public class Aircraft {
 
     public void setAltitudeCommand(char[] c) {
         if (mode == 0) {
-            altitudeCommand = Character.getNumericValue(c[0]) * 10 + Character.getNumericValue(c[1]);
+            altitudeCommand = Character.getNumericValue(c[0]) * 100 + Character.getNumericValue(c[1]) * 10 + Character.getNumericValue(c[2]);
             if (altitudeCommand < 10) {
                 altitudeCommand = 10;
             }
@@ -71,11 +71,7 @@ public class Aircraft {
 
     public void setSpeedCommand(char[] c) {
         if (mode == 0) {
-            speedCommand = 0;
-            if (Character.isDigit(c[0])) {
-                speedCommand = (Character.getNumericValue(c[0])) * 1000;
-            }
-            speedCommand += (Character.getNumericValue(c[1]) * 100 + (Character.getNumericValue(c[2])) * 10 + Character.getNumericValue(c[3]));
+            speedCommand = (Character.getNumericValue(c[0]) * 1000 + Character.getNumericValue(c[1]) * 100 + (Character.getNumericValue(c[2])) * 10 + Character.getNumericValue(c[3]));
             if (speedCommand < 160) {
                 speedCommand = 160;
             }

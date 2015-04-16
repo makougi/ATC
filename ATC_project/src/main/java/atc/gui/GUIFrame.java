@@ -20,7 +20,7 @@ public class GUIFrame extends JFrame {
     Aircraft[] aircraftsTooClose;
 
     public GUIFrame(GameLogic gl) {
-        panelHeight = Toolkit.getDefaultToolkit().getScreenSize().height-400;
+        panelHeight = Toolkit.getDefaultToolkit().getScreenSize().height-100;
         
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -40,7 +40,7 @@ public class GUIFrame extends JFrame {
         commandPanel = new CommandPanel(gl,Color.lightGray,panelHeight);
         containerPanel.add(commandPanel);
         
-        keyboardListener = new KeyboardListener(gl.getCommandParser(),commandPanel);
+        keyboardListener = new KeyboardListener(gl.getCommandParser(),commandPanel,infoPanel1);
         containerPanel.add(keyboardListener);
 
         pack();

@@ -12,13 +12,15 @@ public class KeyboardListener extends JPanel {
     String keyboardInput;
     char keyboardInputAsChar;
     CommandPanel commandPanel;
+    InfoPanel1 infoPanel1;
     String digitsAndAlphabet;
     ArrayDeque<Character> digitsAndAlphabetStack;
     CommandParser commandParser;
 
-    public KeyboardListener(CommandParser parser, CommandPanel panel) {
+    public KeyboardListener(CommandParser parser, CommandPanel panel, InfoPanel1 ip) {
         commandParser = parser;
         commandPanel = panel;
+        infoPanel1 = ip;
 
         digitsAndAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         digitsAndAlphabetStack = new ArrayDeque<Character>();
@@ -34,7 +36,9 @@ public class KeyboardListener extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 keyboardInput = KeyEvent.getKeyText(e.getKeyCode());
-
+                if (keyboardInput.equals("Shift")) {
+                    sendShift();
+                }
                 if (keyboardInput.equals("Enter")) {
                     sendEnter();
 
@@ -63,9 +67,15 @@ public class KeyboardListener extends JPanel {
         setFocusable(true);
     }
 
+    private void sendShift() {
+        infoPanel1.setMode(1);
+    }
+
     private void sendEnter() {
+        infoPanel1.setMode(0);
         commandParser.keybEnter();
         commandPanel.keybEnter();
+
     }
 
     private void sendBackspace() {
