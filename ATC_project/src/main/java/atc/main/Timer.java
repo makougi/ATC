@@ -4,39 +4,56 @@ import atc.gui.*;
 import atc.logic.*;
 import java.util.Random;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ * Luokan tehtävänä on tarjota pelilogiikalle kello, jonka perusteella
+ * toimintoja voidaan aikatauluttaa.
+ */
 public class Timer {
 
-    GUIFrame guiFrame;
-    GameLogic gameLogic;
-    long timeA;
-    int timeLength;
-    int clockA;
-    int clockATop;
-    int clockB;
-    int clockBTop;
-    int clockC;
-    int clockCTop;
-    Boolean gameOn;
+    private GUIFrame guiFrame;
+    private GameLogic gameLogic;
+    private long timeA;
+    private int timeLength;
+    private int clockA;
+    private int clockATop;
+    private int clockB;
+    private int clockBTop;
+    private int clockC;
+    private int clockCTop;
+    private Boolean gameOn;
 
+    /**
+     * konstruktori
+     *
+     * @param gf GUIFrame-olio
+     * @param gl GameLogic-olio
+     */
     public Timer(GUIFrame gf, GameLogic gl) {
         guiFrame = gf;
         gameLogic = gl;
-        timeLength = 10;
+        timeLength = 100;
         clockA = 0;
-        clockATop = 100;
+        clockATop = 10;
         clockB = 0;
-        clockBTop = 100;
+        clockBTop = 10;
         clockC = 0;
-        clockCTop = 100;
+        clockCTop = 10;
         gameOn = true;
         gl.setTimer(this);
         timerLoop();
     }
-    public void stop(){
+
+    /**
+     * metodi pysäyttää kellon
+     */
+    public void stop() {
         gameOn = false;
     }
-    
-    public void timerLoop() {
+
+    private void timerLoop() {
         while (gameOn) {
             timeA = System.currentTimeMillis() + timeLength;
             while (System.currentTimeMillis() < timeA) {
@@ -58,7 +75,7 @@ public class Timer {
             gameLogic.update();
             clockB = 0;
         }
-        if (clockC >= clockCTop){
+        if (clockC >= clockCTop) {
             gameLogic.updateScheduleClock();
             clockC = 0;
         }

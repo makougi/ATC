@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ * Luokka vastaa pelin pääasiallisista toiminnoista
+ */
 public class GameLogic {
 
     private Aircraft aircraft;
@@ -71,18 +77,37 @@ public class GameLogic {
         guiFrame.gameOver(info);
     }
 
+    /**
+     *
+     * @return tutkakuvan ulkopuolelle hävinneiden lentokoneiden määrä
+     */
     public int getLost() {
         return lost;
     }
 
+    /**
+     *
+     * @return laskeutuneiden koneiden määärä
+     */
     public int getLanded() {
         return landed;
     }
 
+    /**
+     * all identifiers-muuttuja pitää sisällään kaikkien lentokoneiden
+     * tunnisteet. metodi palauttaa halutun tunnisteen
+     *
+     * @param i halutun tunnisteen indeksi
+     * @return tunniste
+     */
     public String getIdentifier(int i) {
         return allIdentifiers.get(i);
     }
 
+    /**
+     *
+     * @return lentokoneiden saapumistiedot sisältävä taulukko
+     */
     public ArrayDeque<int[]> getSchedule() {
         return schedule;
     }
@@ -91,6 +116,13 @@ public class GameLogic {
         guiFrame = gf;
     }
 
+    /**
+     * scheduleClock alkaa pelin alkaessa nollasta ja sen arvo kasvaa yhdellä
+     * keskimäärin joka sekunti. Tätä aikataulukelloa hyödynnetään saapuvien
+     * lentokoneiden aikatauluttamisessa.
+     *
+     * @return aikataulukello
+     */
     public int getScheduleClock() {
         return scheduleClock;
     }
@@ -141,9 +173,18 @@ public class GameLogic {
         schedule.add(flight);
     }
 
+    /**
+     * Timer-luokan olio kutsuu tätä metodia keskimäärin kerran sekunnissa,
+     * jolloin scheduleclock muuttujan arvoa lisätään yhdellä ja samalla
+     * kutsutaan aikataulun päivittävää metodia.
+     */
     public void updateScheduleClock() {
         scheduleClock++;
-        
+        updateSchedule();
+    }
+
+    private void updateSchedule() {
+
         if (scheduleScope < scheduleScopeTop) {
             scheduleScope++;
         }
@@ -200,15 +241,30 @@ public class GameLogic {
         }
     }
 
+    /**
+     * metodi käsittelee laskeutuneen lentokoneen. Se lisää laskeutuneiden
+     * määrää yhdellä ja välittää lentokoneen poistettavaksi lentokoneet
+     * sisältävästä taulukosta.
+     *
+     * @param a laskeutunut lentokone
+     */
     public void landed(Aircraft a) {
         landed++;
         removeList.add(a);
     }
 
+    /**
+     *
+     * @return muuttujan arvo, joka määrittää tutkakuvan näkymän kokoa
+     */
     public int getZoom() {
         return zoom;
     }
 
+    /**
+     *
+     * @return kiitoradan sijainti x/y koordinaatistossa
+     */
     public int[] getRunwayPosition() {
         return runwayPosition;
     }
@@ -217,6 +273,9 @@ public class GameLogic {
         return commandParser;
     }
 
+    /**
+     * päivittää lentokoneiden sijainti- ym. tiedot
+     */
     public void update() {
         updateAircrafts();
     }
@@ -239,6 +298,10 @@ public class GameLogic {
         removeList.clear();
     }
 
+    /**
+     *
+     * @return lista kaikista tutkaruudulla olevista lentokoneista
+     */
     public ArrayList<Aircraft> getAircrafts() {
         return aircrafts;
     }

@@ -10,6 +10,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ * Luokka on paneeli, joka näyttää lentkoneiden aikataulutietoja ja laskeutuneet
+ * ja epäonnistuneet lennot
+ */
 public class InfoPanel2 extends JPanel {
 
     GameLogic gl;
@@ -18,6 +25,13 @@ public class InfoPanel2 extends JPanel {
     private int panelHeight;
     private Font font;
 
+    /**
+     * Konstruktori
+     *
+     * @param gameLogic GameLogic-olio
+     * @param c paneelin väri
+     * @param ph pääpaneelin korkeus
+     */
     public InfoPanel2(GameLogic gameLogic, Color c, int ph) {
         font = new Font("Courier", Font.BOLD, 10);
         gl = gameLogic;
@@ -33,6 +47,11 @@ public class InfoPanel2 extends JPanel {
         setBackground(c);
     }
 
+    /**
+     * paintComponent
+     *
+     * @param g grafiikkaolio
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -66,6 +85,9 @@ public class InfoPanel2 extends JPanel {
         }
     }
 
+    /**
+     * metodi päivittää paneelin
+     */
     public void drawUpdate() {
         this.repaint();
     }

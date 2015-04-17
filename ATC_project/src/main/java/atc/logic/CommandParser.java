@@ -3,6 +3,12 @@ package atc.logic;
 import java.util.ArrayDeque;
 import atc.gui.CommandPanel;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ * luokan tehtävänä on erotella komennot käyttäjän syöttämästä tekstistä
+ */
 public class CommandParser {
 
     private ArrayDeque<Character> input;
@@ -17,6 +23,11 @@ public class CommandParser {
     private char[] fourChar;//speed or altitude
     private char[] fiveChar;//speed
 
+    /**
+     * konstruktori
+     *
+     * @param gl gamelogic-olio
+     */
     public CommandParser(GameLogic gl) {
         twoChar = new char[2];
         threeChar = new char[3];
@@ -27,6 +38,10 @@ public class CommandParser {
         temp = new ArrayDeque();
     }
 
+    /**
+     *
+     * @return lentokone, jota annettu komento koskee
+     */
     public Aircraft getAircraft() {
         return aircraft;
     }
@@ -131,14 +146,25 @@ public class CommandParser {
         initiateCommandParsing();
     }
 
+    /**
+     * antaa commandparserille tiedon, että enteriä painettiin
+     */
     public void keybEnter() {
         parseInput();
     }
 
+    /**
+     * antaa commandparserille tiedon, että backspacea painettiin
+     */
     public void keybBackspace() {
         input.pollLast();
     }
 
+    /**
+     * antaa commandparserille tiedon, minkä merkin käyttäjä kirjoitti
+     *
+     * @param c käyttäjän kirjoittama merkki
+     */
     public void keybCharacter(char c) {
         input.add(c);
     }

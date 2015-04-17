@@ -8,6 +8,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ * Luokka paneelia varten, jonka sisään tulevat pienemmät paneelit
+ */
 public class ContainerPanel extends JPanel {
 
     GameLogic gameLogic;
@@ -15,12 +21,19 @@ public class ContainerPanel extends JPanel {
     private int panelHeight;
     private Color color;
 
-    public ContainerPanel(GameLogic gl,Color cl, int ph) {
+    /**
+     * Konstruktori
+     *
+     * @param gl GameLogic-olio
+     * @param cl tämän paneelin haluttu väri
+     * @param ph tämän paneelin haluttu korkeus
+     */
+    public ContainerPanel(GameLogic gl, Color cl, int ph) {
         color = cl;
         gameLogic = gl;
 
         panelHeight = ph;
-        panelWidth = panelHeight/3;
+        panelWidth = panelHeight / 3;
 
         initGamePanel();
     }
@@ -28,19 +41,5 @@ public class ContainerPanel extends JPanel {
     private void initGamePanel() {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
         setBackground(color);
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        drawSomething(g);
-    }
-
-    private void drawSomething(Graphics g) {
-
-    }
-
-    public void drawUpdate() {
-        this.repaint();
     }
 }

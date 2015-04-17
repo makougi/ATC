@@ -10,6 +10,12 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ * Luokka paneelia varten, johon tulee tietoa lentokoneista
+ */
 public class InfoPanel1 extends JPanel {
 
     GameLogic gl;
@@ -19,6 +25,13 @@ public class InfoPanel1 extends JPanel {
     private Font font;
     private int mode;
 
+    /**
+     * Konstruktori
+     *
+     * @param gameLogic GameLogic-olio
+     * @param c tämän paneelin haluttu väri
+     * @param ph pääpaneelin korkeus
+     */
     public InfoPanel1(GameLogic gameLogic, Color c, int ph) {
         mode = 0;
         font = new Font("Arial", Font.PLAIN, 12);
@@ -30,6 +43,11 @@ public class InfoPanel1 extends JPanel {
         initGamePanel(c);
     }
 
+    /**
+     * Tämä paneeli näyttää eri moodeissa eri kuvaa, tässä asetetaan moodi
+     *
+     * @param i moodi
+     */
     public void setMode(int i) {
         mode = i;
     }
@@ -39,6 +57,11 @@ public class InfoPanel1 extends JPanel {
         setBackground(c);
     }
 
+    /**
+     * paintComponent
+     *
+     * @param g grafiikkaolio
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -143,6 +166,9 @@ public class InfoPanel1 extends JPanel {
         g.drawString("LANDED", textX, textY + (fontHeight * 1));
     }
 
+    /**
+     * metodi päivittää paneelin
+     */
     public void drawUpdate() {
         this.repaint();
     }

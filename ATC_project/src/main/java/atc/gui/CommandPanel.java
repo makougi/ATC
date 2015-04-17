@@ -10,6 +10,13 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.util.ArrayDeque;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ *
+ * Luokka käyttäjän syötteen näyttämiseksi
+ */
 public class CommandPanel extends JPanel {
 
     GameLogic gameLogic;
@@ -26,6 +33,14 @@ public class CommandPanel extends JPanel {
     private Boolean gameOn;
     private String[] info;
 
+    /**
+     *
+     * Constructor
+     *
+     * @param gl GameLogic-olio
+     * @param cl Tämän paneelin väri
+     * @param ph Sen paneelin korkeus, jonka sisässä tämä paneeli on
+     */
     public CommandPanel(GameLogic gl, Color cl, int ph) {
         gameOn = true;
         infoText = "";
@@ -49,21 +64,37 @@ public class CommandPanel extends JPanel {
         gl.getCommandParser().setCommandPanel(this);
     }
 
+    /**
+     *
+     * @param s String-taulukko, jossa tietoja game overin aiheuttaneista
+     * kahdesta lentokoneesta
+     */
     public void gameOver(String[] s) {
         info = s;
         gameOn = false;
         this.repaint();
     }
 
+    /**
+     * Jos käyttäjän syöte on virheellinen
+     */
     public void invalidCommand() {
         infoText = "Invalid command";
     }
 
+    /**
+     * Paneelin alustamista käsittelevä metodi
+     */
     private void initGamePanel() {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
         setBackground(color);
     }
 
+    /**
+     * paintComponent
+     *
+     * @param g Grafiikkaolio
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -75,17 +106,22 @@ public class CommandPanel extends JPanel {
         }
     }
 
+    /**
+     * Teksti, joka piirretään pelin päättyessä
+     *
+     * @param g Grafiikkaolio
+     */
     private void drawGameOver(Graphics g) {
         font = new Font("Arial", Font.BOLD, 11);
         g.setFont(font);
         g.drawString("GAME OVER", 10, 20);
         g.drawString("Two aircrafts too close", 10, 40);
-        g.drawString(info[0]+" and "+info[6], 10, 60);
-        g.drawString("X: "+info[1]+" | "+info[7], 10, 80);
-        g.drawString("Y: "+info[2]+" | "+info[8], 10, 100);
-        g.drawString("Altitude: "+info[3]+" | "+info[9], 10, 120);
-        g.drawString("Heading: "+info[4]+" | "+info[10], 10, 140);
-        g.drawString("Speed: "+info[5]+" | "+info[11], 10, 160);
+        g.drawString(info[0] + " and " + info[6], 10, 60);
+        g.drawString("X: " + info[1] + " | " + info[7], 10, 80);
+        g.drawString("Y: " + info[2] + " | " + info[8], 10, 100);
+        g.drawString("Altitude: " + info[3] + " | " + info[9], 10, 120);
+        g.drawString("Heading: " + info[4] + " | " + info[10], 10, 140);
+        g.drawString("Speed: " + info[5] + " | " + info[11], 10, 160);
     }
 
     private void drawText(Graphics g) {
@@ -106,6 +142,9 @@ public class CommandPanel extends JPanel {
         }
     }
 
+    /**
+     * Kun käyttäjä painaa enteriä, teksti poistetaan
+     */
     public void keybEnter() {
         if (gameOn) {
             stringQueue.clear();
@@ -114,6 +153,9 @@ public class CommandPanel extends JPanel {
         }
     }
 
+    /**
+     * Kun käyttäjä painaa backspacea, merkki poistetaan
+     */
     public void keybBackspace() {
         if (gameOn) {
             if (stringQueue.size() == 1 && stringQueue.peekFirst().length() == 0) {//if empty
@@ -132,6 +174,11 @@ public class CommandPanel extends JPanel {
         }
     }
 
+    /**
+     * Kun käyttäjä syöttää merkin, se tulostetaan ruudulle
+     *
+     * @param c käyttäjän syöttämä merkki
+     */
     public void keybCharacter(char c) {
         if (gameOn) {
             if (infoText.length() != 0) {

@@ -14,6 +14,12 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ * Luokka vastaa tutkakuvan näyttämisestä
+ */
 public class RadarPanel extends JPanel {
 
     private Image square;
@@ -36,6 +42,12 @@ public class RadarPanel extends JPanel {
     private int fontScale;
     private GameLogic gl;
 
+    /**
+     * konstruktori
+     *
+     * @param gameLogic gamelogic-olio
+     * @param ph haluttu paneelin korkeus
+     */
     public RadarPanel(GameLogic gameLogic, int ph) {
         gl = gameLogic;
         panelHeight = ph;
@@ -63,6 +75,11 @@ public class RadarPanel extends JPanel {
         whiteDot = ii.getImage();
     }
 
+    /**
+     * paintcomponent
+     *
+     * @param g grafiikkaolio
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -80,7 +97,7 @@ public class RadarPanel extends JPanel {
     }
 
     private void drawAircrafts(Graphics g) {
-        for (Aircraft a : aircrafts){
+        for (Aircraft a : aircrafts) {
 //        for (Iterator<Aircraft> it = aircrafts.iterator(); it.hasNext();){
 //            Aircraft a = it.next();
 
@@ -114,6 +131,9 @@ public class RadarPanel extends JPanel {
         }
     }
 
+    /**
+     * metodi päivittää tutkakuvan
+     */
     public void drawUpdate() {
         this.repaint();
     }

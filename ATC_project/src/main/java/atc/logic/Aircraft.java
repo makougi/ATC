@@ -2,6 +2,12 @@ package atc.logic;
 
 import java.util.Random;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ * Lentokoneen toteuttava luokka
+ */
 public class Aircraft {
 
     private Random random;
@@ -21,6 +27,17 @@ public class Aircraft {
     private int mode;
     private GameLogic gl;
 
+    /**
+     * konstruktori
+     *
+     * @param gameLogic gamelogic-olio
+     * @param id lentokoneen tunniste1
+     * @param initialX aloituspaikka
+     * @param initialY aloituspaikka
+     * @param initialAltitude aloituskorkeus
+     * @param initialHeading aloitussuunta
+     * @param initialSpeed aloitusnopeus
+     */
     public Aircraft(GameLogic gameLogic, String id, int initialX, int initialY, int initialAltitude, int initialHeading, int initialSpeed) {
         x = initialX;
         y = initialY;
@@ -48,6 +65,11 @@ public class Aircraft {
         mode = m;
     }
 
+    /**
+     * asettaa korkeuskomennon
+     *
+     * @param c korkeuskomento
+     */
     public void setAltitudeCommand(char[] c) {
         if (mode == 0) {
             altitudeCommand = Character.getNumericValue(c[0]) * 100 + Character.getNumericValue(c[1]) * 10 + Character.getNumericValue(c[2]);
@@ -57,6 +79,11 @@ public class Aircraft {
         }
     }
 
+    /**
+     * asettaa suuntakomennon
+     *
+     * @param c suuntakomento
+     */
     public void setHeadingCommand(char[] c) {
         if (mode == 0) {
             headingCommand = (Character.getNumericValue(c[0])) * 100 + (Character.getNumericValue(c[1]) * 10 + Character.getNumericValue(c[2]));
@@ -69,6 +96,11 @@ public class Aircraft {
         }
     }
 
+    /**
+     * asettaa nopeuskomennon
+     *
+     * @param c nopeuskomento
+     */
     public void setSpeedCommand(char[] c) {
         if (mode == 0) {
             speedCommand = (Character.getNumericValue(c[0]) * 1000 + Character.getNumericValue(c[1]) * 100 + (Character.getNumericValue(c[2])) * 10 + Character.getNumericValue(c[3]));
@@ -78,6 +110,10 @@ public class Aircraft {
         }
     }
 
+    /**
+     *
+     * @return lentokoneen viimeisimmät sijainnit
+     */
     public int[][] getHistory() {
         return history;
     }
@@ -106,6 +142,10 @@ public class Aircraft {
         return heading;
     }
 
+    /**
+     *
+     * @return korkeuskomento
+     */
     public int getZCommand() {
         return altitudeCommand;
     }
@@ -118,6 +158,10 @@ public class Aircraft {
         return headingCommand;
     }
 
+    /**
+     * päivittää lentokoneen sijainnin, korkeuden, nopeuden, sunnunan ja tiedot
+     * edellisistä sijainneista
+     */
     public void update() {
         if (speed == 0) {
             mode = 2;

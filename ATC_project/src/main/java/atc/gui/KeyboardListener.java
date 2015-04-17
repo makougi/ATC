@@ -6,6 +6,12 @@ import javax.swing.JPanel;
 import java.util.ArrayDeque;
 import atc.logic.CommandParser;
 
+/**
+ *
+ * @author Kimmo
+ * <p>
+ * keyboardlistener-luokka
+ */
 @SuppressWarnings("serial")
 public class KeyboardListener extends JPanel {
 
@@ -17,6 +23,13 @@ public class KeyboardListener extends JPanel {
     ArrayDeque<Character> digitsAndAlphabetStack;
     CommandParser commandParser;
 
+    /**
+     * näppäimistön kuuntelija
+     *
+     * @param parser commandparser-olio
+     * @param panel commandpanel-olio
+     * @param ip infopanel-olio
+     */
     public KeyboardListener(CommandParser parser, CommandPanel panel, InfoPanel1 ip) {
         commandParser = parser;
         commandPanel = panel;
