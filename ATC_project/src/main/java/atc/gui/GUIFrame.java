@@ -16,14 +16,14 @@ import java.awt.Toolkit;
  */
 public class GUIFrame extends JFrame {
 
-    RadarPanel radarPanel;
-    ContainerPanel containerPanel;
-    CommandPanel commandPanel;
-    InfoPanel1 infoPanel1;
-    InfoPanel2 infoPanel2;
-    KeyboardListener keyboardListener;
-    int panelHeight;
-    Aircraft[] aircraftsTooClose;
+    private RadarPanel radarPanel;
+    private ContainerPanel containerPanel;
+    private CommandPanel commandPanel;
+    private InfoPanel1 infoPanel1;
+    private InfoPanel2 infoPanel2;
+    private KeyboardListener keyboardListener;
+    private int panelHeight;
+    private Aircraft[] aircraftsTooClose;
 
     /**
      * Konstruktori
@@ -55,7 +55,7 @@ public class GUIFrame extends JFrame {
         containerPanel.add(keyboardListener);
 
         pack();
-        setTitle("ATC");
+        setTitle("Air Traffic Control Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 

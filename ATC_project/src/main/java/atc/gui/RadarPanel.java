@@ -75,11 +75,6 @@ public class RadarPanel extends JPanel {
         whiteDot = ii.getImage();
     }
 
-    /**
-     * paintcomponent
-     *
-     * @param g grafiikkaolio
-     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

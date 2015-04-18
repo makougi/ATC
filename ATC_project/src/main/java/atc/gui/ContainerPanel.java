@@ -16,7 +16,7 @@ import java.awt.Toolkit;
  */
 public class ContainerPanel extends JPanel {
 
-    GameLogic gameLogic;
+    private GameLogic gameLogic;
     private int panelWidth;
     private int panelHeight;
     private Color color;

@@ -4,7 +4,7 @@ import atc.logic.GameLogic;
 import atc.gui.*;
 
 /**
- *
+ * 
  * @author Kimmo
  * <p>
  * pelin käynnistävä luokka

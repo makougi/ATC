@@ -19,7 +19,7 @@ import java.util.ArrayDeque;
  */
 public class CommandPanel extends JPanel {
 
-    GameLogic gameLogic;
+    private GameLogic gameLogic;
     private int panelWidth;
     private int panelHeight;
     private int stringX;
@@ -90,11 +90,6 @@ public class CommandPanel extends JPanel {
         setBackground(color);
     }
 
-    /**
-     * paintComponent
-     *
-     * @param g Grafiikkaolio
-     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -110,6 +105,7 @@ public class CommandPanel extends JPanel {
      * Teksti, joka piirretään pelin päättyessä
      *
      * @param g Grafiikkaolio
+     *
      */
     private void drawGameOver(Graphics g) {
         font = new Font("Arial", Font.BOLD, 11);

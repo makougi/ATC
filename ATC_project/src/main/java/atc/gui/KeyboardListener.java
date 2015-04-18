@@ -15,13 +15,13 @@ import atc.logic.CommandParser;
 @SuppressWarnings("serial")
 public class KeyboardListener extends JPanel {
 
-    String keyboardInput;
-    char keyboardInputAsChar;
-    CommandPanel commandPanel;
-    InfoPanel1 infoPanel1;
-    String digitsAndAlphabet;
-    ArrayDeque<Character> digitsAndAlphabetStack;
-    CommandParser commandParser;
+    private String keyboardInput;
+    private char keyboardInputAsChar;
+    private CommandPanel commandPanel;
+    private InfoPanel1 infoPanel1;
+    private String digitsAndAlphabet;
+    private ArrayDeque<Character> digitsAndAlphabetStack;
+    private CommandParser commandParser;
 
     /**
      * näppäimistön kuuntelija

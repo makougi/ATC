@@ -19,8 +19,8 @@ import java.awt.Toolkit;
  */
 public class InfoPanel2 extends JPanel {
 
-    GameLogic gl;
-    Aircraft a;
+    private GameLogic gl;
+    private Aircraft a;
     private int panelWidth;
     private int panelHeight;
     private Font font;
@@ -47,18 +47,13 @@ public class InfoPanel2 extends JPanel {
         setBackground(c);
     }
 
-    /**
-     * paintComponent
-     *
-     * @param g grafiikkaolio
-     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawSomething(g);
+        drawInfo(g);
     }
 
-    private void drawSomething(Graphics g) {
+    private void drawInfo(Graphics g) {
         g.setFont(font);
         int textX = 10;
         int textY = 20;
