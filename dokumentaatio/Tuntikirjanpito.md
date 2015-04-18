@@ -58,3 +58,6 @@ Työtä 8 tuntia
 - Luokkakaaviota 2 tuntia
 - Käyttöohjetta 4 tuntia
 - Rakenteen kuvausta 1 tunti
+
+##18.4.2015
+Luokkakaaviota 2 tuntia
