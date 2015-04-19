@@ -61,3 +61,7 @@ Työtä 8 tuntia
 
 ##18.4.2015
 Luokkakaaviota 2 tuntia
+Sekvenssikaavioita 3 tuntia
+
+##19.4.2015
+Sekvenssikaavioita 2 tuntia

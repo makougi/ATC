@@ -42,7 +42,7 @@ public class Timer {
         clockC = 0;
         clockCTop = 10;
         gameOn = true;
-        gl.setTimer(this);
+        gameLogic.setTimer(this);
         timerLoop();
     }
 
