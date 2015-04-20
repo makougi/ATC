@@ -34,7 +34,7 @@ public class AircraftTest {
     @Before
     public void setUp() {
         GameLogic gl = new GameLogic();
-        a = new Aircraft(gl, "111111", 111111, 111111, 111111, 111111, 111111);
+        a = new Aircraft(gl, "111111", 100, 100, 100, 100, 100);
 
     }
 
@@ -63,8 +63,22 @@ public class AircraftTest {
 
     @Test
     public void setSpeedCommandToimii() {
-        char[] c = {'0','1', '0', '0'};
+        char[] c = {'0', '1', '0', '0'};
         a.setSpeedCommand(c);
         assertEquals(160, a.getSpeedCommand());
+    }
+
+    @Test
+    public void updateToimii() {
+        char[] alt = {'2', '0', '0'};
+        char[] hdg = {'2', '0', '0'};
+        char[] spd = {'0', '2', '0', '0'};
+        a.setAltitudeCommand(alt);
+        a.setHeadingCommand(hdg);
+        a.setSpeedCommand(spd);
+        a.update();
+        assertEquals(101,a.getZ());
+        assertEquals(103, a.getHeading());
+        assertEquals(105, a.getSpeed());
     }
 }
