@@ -65,3 +65,6 @@ Sekvenssikaavioita 3 tuntia
 
 ##19.4.2015
 Sekvenssikaavioita 2 tuntia
+
+##20.4.2015
+Testiä 3 tuntia

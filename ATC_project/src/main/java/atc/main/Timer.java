@@ -57,6 +57,7 @@ public class Timer {
         while (gameOn) {
             timeA = System.currentTimeMillis() + timeLength;
             while (System.currentTimeMillis() < timeA) {
+                //loop and do nothing
             }
             tick();
         }
