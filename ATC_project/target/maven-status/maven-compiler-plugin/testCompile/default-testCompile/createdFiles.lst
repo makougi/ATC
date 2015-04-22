@@ -1,1 +1,5 @@
+atc\logic\GameLogicTest.class
+atc\logic\ValuesTest.class
+atc\logic\AircraftSchedulerTest.class
 atc\logic\CommandParserTest.class
+atc\logic\AircraftTest.class

@@ -7,7 +7,6 @@ import atc.main.Timer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 /**
  *
@@ -18,42 +17,28 @@ import java.util.Random;
 public class GameLogic {
 
     private Aircraft aircraft;
-    private ArrayList<Aircraft> aircrafts;
-    private int scheduleClock;
-    private ArrayDeque<int[]> schedule;
-    private int timeOfNextScheduleEntry;
-    private int scheduleScope;
-    private int scheduleScopeTop;
-    private int averageFrequency;
+    public ArrayList<Aircraft> aircrafts;
     private CommandParser commandParser;
     private int zoom;
     private int[] runwayPosition = {300, 300};
     private int landed;
     private int lost;
-    private Random random;
     private RadarPanel radarPanel;
     private GUIFrame guiFrame;
-    private ArrayList<String> allIdentifiers;
     private ArrayList<Aircraft> removeList;
     private HashMap<Integer, Aircraft> positionMap;
     private Aircraft[] tooClose;
     private Timer timer;
+    private AircraftScheduler aircraftScheduler;
 
     public GameLogic() {
         tooClose = new Aircraft[2];
-        positionMap = new HashMap();
-        removeList = new ArrayList();
-        allIdentifiers = new ArrayList();
-        scheduleScope = 0;
-        scheduleScopeTop = 300;//seconds that the schedule shows in to the future
-        averageFrequency = 30;//new flight every x seconds in average
-        random = new Random();
-        schedule = new ArrayDeque<int[]>();
-        scheduleClock = 0;
-        timeOfNextScheduleEntry = random.nextInt(4) + 5;
+        positionMap = new HashMap<Integer,Aircraft>();
+        removeList = new ArrayList<Aircraft>();
         zoom = 1000;
-        aircrafts = new ArrayList();
+        aircrafts = new ArrayList<Aircraft>();
         commandParser = new CommandParser(this);
+        aircraftScheduler = new AircraftScheduler(this, aircrafts, zoom);
     }
 
     public void setTimer(Timer t) {
@@ -101,19 +86,26 @@ public class GameLogic {
      * @return tunniste
      */
     public String getIdentifier(int i) {
-        return allIdentifiers.get(i);
+        return aircraftScheduler.getIdentifier(i);
     }
+//    public String getIdentifier(int i) {
+//        return aircrallIdentifiers.get(i);
+//    }
 
     /**
      *
      * @return lentokoneiden saapumistiedot sisältävä taulukko
      */
     public ArrayDeque<int[]> getSchedule() {
-        return schedule;
+        return aircraftScheduler.getSchedule();
     }
+//    public ArrayDeque<int[]> getSchedule() {
+//        return schedule;
+//    }
 
     public void setGUIFrame(GUIFrame gf) {
         guiFrame = gf;
+        aircraftScheduler.setGUIFrame(gf);
     }
 
     /**
@@ -124,83 +116,32 @@ public class GameLogic {
      * @return aikataulukello
      */
     public int getScheduleClock() {
-        return scheduleClock;
+        return aircraftScheduler.getScheduleClock();
     }
+//    public int getScheduleClock() {
+//        return scheduleClock;
+//    }
 
     public void setRadarPanel(RadarPanel rp) {
         radarPanel = rp;
+        aircraftScheduler.setRadarPanel(rp);
     }
-
-    private void addNewAircraft() {
-        int x;
-        int y;
-        int z = schedule.peekFirst()[3];
-        int heading;
-        int speed = random.nextInt(200) + 220;
-
-        if (schedule.peekFirst()[2] == 0) {
-            x = radarPanel.getSize().width * 1 / 20 * zoom;
-            y = radarPanel.getSize().height * 1 / 20 * zoom;
-            heading = 90;
-        } else if (schedule.peekFirst()[2] == 1) {
-            x = radarPanel.getSize().width * 15 / 20 * zoom;
-            y = radarPanel.getSize().height * 1 / 20 * zoom;
-            heading = 180;
-        } else if (schedule.peekFirst()[2] == 2) {
-            x = radarPanel.getSize().width * 19 / 20 * zoom;
-            y = radarPanel.getSize().height * 10 / 20 * zoom;
-            heading = 270;
-        } else {
-            x = radarPanel.getSize().width * 1 / 20 * zoom;
-            y = radarPanel.getSize().height * 18 / 20 * zoom;
-            heading = 90;
-        }
-        aircrafts.add(new Aircraft(this, allIdentifiers.get(schedule.peekFirst()[0]), x, y, z, heading, speed));
-    }
-
-    private void scheduleNewFlight() {
-        allIdentifiers.add(Values.createIdentifier(this));
-        int[] flight = new int[4];
-        flight[0] = allIdentifiers.size() - 1;
-        flight[1] = scheduleScope + scheduleClock;//time when aircraft enters radar
-        flight[2] = random.nextInt(4);//place of entry
-        flight[3] = random.nextInt(100) + 50;//initial altitude
-        for (int[] f : schedule) {
-            if (flight[2] == f[2] && (flight[3] < f[3] + 10 && flight[3] > f[3] - 10)) {//jos lentokone tulisi liian lähelle toista lentokonetta
-                return;//älä luo lentoa
-            }
-        }
-        schedule.add(flight);
-    }
-
+//    public void setRadarPanel(RadarPanel rp) {
+//        radarPanel = rp;
+//    }
+    
     /**
      * Timer-luokan olio kutsuu tätä metodia keskimäärin kerran sekunnissa,
      * jolloin scheduleclock muuttujan arvoa lisätään yhdellä ja samalla
      * kutsutaan aikataulun päivittävää metodia.
      */
     public void updateScheduleClock() {
-        scheduleClock++;
-        updateSchedule();
+        aircraftScheduler.updateScheduleClock();
     }
-
-    private void updateSchedule() {
-
-        if (scheduleScope < scheduleScopeTop) {
-            scheduleScope++;
-        }
-
-        if (scheduleClock == timeOfNextScheduleEntry) {
-            scheduleNewFlight();
-            timeOfNextScheduleEntry += random.nextInt(averageFrequency * 2) + 1;
-        }
-        if (!schedule.isEmpty()) {
-            if (schedule.peekFirst()[1] == scheduleClock) {
-                addNewAircraft();
-                schedule.pollFirst();
-            }
-        }
-        guiFrame.updateInfoPanel2();
-    }
+//    public void updateScheduleClock() {
+//        scheduleClock++;
+//        updateSchedule();
+//    }
 
     private boolean AircraftsTooClose(Aircraft a) {
         int divider = 10000;
@@ -305,4 +246,102 @@ public class GameLogic {
     public ArrayList<Aircraft> getAircrafts() {
         return aircrafts;
     }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    private void addNewAircraft() {
+//        int x;
+//        int y;
+//        int z = schedule.peekFirst()[3];
+//        int heading;
+//        int speed = random.nextInt(200) + 220;
+//
+//        if (schedule.peekFirst()[2] == 0) {
+//            x = radarPanel.getSize().width * 1 / 20 * zoom;
+//            y = radarPanel.getSize().height * 1 / 20 * zoom;
+//            heading = 90;
+//        } else if (schedule.peekFirst()[2] == 1) {
+//            x = radarPanel.getSize().width * 15 / 20 * zoom;
+//            y = radarPanel.getSize().height * 1 / 20 * zoom;
+//            heading = 180;
+//        } else if (schedule.peekFirst()[2] == 2) {
+//            x = radarPanel.getSize().width * 19 / 20 * zoom;
+//            y = radarPanel.getSize().height * 10 / 20 * zoom;
+//            heading = 270;
+//        } else {
+//            x = radarPanel.getSize().width * 1 / 20 * zoom;
+//            y = radarPanel.getSize().height * 18 / 20 * zoom;
+//            heading = 90;
+//        }
+//        aircrafts.add(new Aircraft(this, allIdentifiers.get(schedule.peekFirst()[0]), x, y, z, heading, speed));
+//    }
+//
+//    private void scheduleNewFlight() {
+//        allIdentifiers.add(Values.createIdentifier(this));
+//        int[] flight = new int[4];
+//        flight[0] = allIdentifiers.size() - 1;
+//        flight[1] = scheduleScope + scheduleClock;//time when aircraft enters radar
+//        flight[2] = random.nextInt(4);//place of entry
+//        flight[3] = random.nextInt(100) + 50;//initial altitude
+//        for (int[] f : schedule) {
+//            if (flight[2] == f[2] && (flight[3] < f[3] + 10 && flight[3] > f[3] - 10)) {//jos lentokone tulisi liian lähelle toista lentokonetta
+//                return;//älä luo lentoa
+//            }
+//        }
+//        schedule.add(flight);
+//    }
+
+//    private void updateSchedule() {
+//
+//        if (scheduleScope < scheduleScopeTop) {
+//            scheduleScope++;
+//        }
+//
+//        if (scheduleClock == timeOfNextScheduleEntry) {
+//            scheduleNewFlight();
+//            timeOfNextScheduleEntry += random.nextInt(averageFrequency * 2) + 1;
+//        }
+//        if (!schedule.isEmpty()) {
+//            if (schedule.peekFirst()[1] == scheduleClock) {
+//                addNewAircraft();
+//                schedule.pollFirst();
+//            }
+//        }
+//        guiFrame.updateInfoPanel2();
+//    }
+ 
+// FROM OLD CONSTRUCTOR    
+//        scheduleScope = 0;
+//        scheduleScopeTop = 300;//seconds that the schedule shows in to the future
+//        averageFrequency = 30;//new flight every x seconds in average
+//        schedule = new ArrayDeque<int[]>();
+//        scheduleClock = 0;
+//        timeOfNextScheduleEntry = random.nextInt(4) + 5;
+    
 }

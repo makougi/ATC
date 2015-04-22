@@ -92,9 +92,11 @@ public class RadarPanel extends JPanel {
     }
 
     private void drawAircrafts(Graphics g) {
-        for (Aircraft a : aircrafts) {
+        ArrayList<Aircraft> aircrafts2 = new ArrayList<>(aircrafts);
+        
+        for (Aircraft a : aircrafts2) {
 //        for (Iterator<Aircraft> it = aircrafts.iterator(); it.hasNext();){
-//            Aircraft a = it.next();
+//            Aircraft; a = it.next();
 
             aX = a.getX() / zoom;
             aY = a.getY() / zoom;

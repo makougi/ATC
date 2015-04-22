@@ -4,6 +4,7 @@ atc\gui\GUIFrame.class
 atc\gui\KeyboardListener$1.class
 atc\logic\CommandParser.class
 atc\main\Main.class
+atc\logic\AircraftScheduler.class
 atc\gui\CommandPanel.class
 atc\gui\KeyboardListener.class
 atc\gui\InfoPanel2.class

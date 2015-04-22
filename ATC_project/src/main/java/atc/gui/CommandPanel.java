@@ -55,7 +55,7 @@ public class CommandPanel extends JPanel {
         stringX = stringY / 2;
 
         rowLength = panelWidth / 10;
-        stringQueue = new ArrayDeque();
+        stringQueue = new ArrayDeque<String>();
         stringQueue.add("");
 
         font = new Font("Arial", Font.PLAIN, 12);

@@ -45,6 +45,9 @@ public class Timer {
         gameLogic.setTimer(this);
         timerLoop();
     }
+    public boolean getGameOn(){
+        return gameOn;
+    }
 
     /**
      * metodi pysäyttää kellon

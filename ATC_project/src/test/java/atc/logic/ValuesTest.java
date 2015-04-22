@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author makougi
+ * @author Kimmo
  */
 public class ValuesTest {
 
@@ -33,6 +33,7 @@ public class ValuesTest {
 
     @Before
     public void setUp() {
+        gl = new GameLogic();
     }
 
     @After

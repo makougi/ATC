@@ -34,15 +34,15 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                                 
-                                <configuration>
-                                    <instrumentation>
-                                        <includes>
-                                            <include>atc.logic/*.class</include>
-                                            <!--<include>ristinolla.tekoaly/*.class</include>
-                                            <include>ristinolla/**/*.class</include>        testaa kaikkien pakkauksien kaikki luokat-->
-                                        </includes>
-                                    </instrumentation>
-                                </configuration>
+                <configuration>
+                    <instrumentation>
+                        <includes>
+                            <include>atc.logic/*.class</include>
+                            <!--<include>ristinolla.tekoaly/*.class</include>
+                            <include>ristinolla/**/*.class</include>        testaa kaikkien pakkauksien kaikki luokat-->
+                        </includes>
+                    </instrumentation>
+                </configuration>
                     
                 <version>2.7</version>
             </plugin>
@@ -51,16 +51,16 @@
                 <artifactId>pitest-maven</artifactId>
                 <version>1.1.4</version>
                                 
-                                <configuration>
-                                    <targetClasses>
-                                        <param>atc.logic.*</param>
-                                        <!--<param>ristinolla.tekoaly.*</param>-->
-                                    </targetClasses>
-                                    <targetTests>
-                                        <param>atc.logic.*</param>
-                                        <!--<param>ristinolla.tekoaly.*</param>-->
-                                    </targetTests>
-                                </configuration>
+                <configuration>
+                    <targetClasses>
+                        <param>atc.logic.*</param>
+                        <!--<param>ristinolla.tekoaly.*</param>-->
+                    </targetClasses>
+                    <targetTests>
+                        <param>atc.logic.*</param>
+                        <!--<param>ristinolla.tekoaly.*</param>-->
+                    </targetTests>
+                </configuration>
                                 
             </plugin>
             <plugin>

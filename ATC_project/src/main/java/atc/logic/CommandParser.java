@@ -34,8 +34,8 @@ public class CommandParser {
         fourChar = new char[4];
         fiveChar = new char[5];
         gameLogic = gl;
-        input = new ArrayDeque();
-        temp = new ArrayDeque();
+        input = new ArrayDeque<Character>();
+        temp = new ArrayDeque<ArrayDeque<Character>>();
     }
 
     /**
@@ -134,10 +134,10 @@ public class CommandParser {
 
     private void parseInput() {
         temp.clear();
-        temp.add(new ArrayDeque());
+        temp.add(new ArrayDeque<Character>());
         for (Character c : input) {
             if (c == ' ') {
-                temp.add(new ArrayDeque());
+                temp.add(new ArrayDeque<Character>());
             } else {
                 temp.peekLast().add(c);
             }

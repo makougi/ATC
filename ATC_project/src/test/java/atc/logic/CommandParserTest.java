@@ -18,7 +18,7 @@ import java.util.Random;
 
 /**
  *
- * @author makougi
+ * @author Kimmo
  */
 public class CommandParserTest {
 

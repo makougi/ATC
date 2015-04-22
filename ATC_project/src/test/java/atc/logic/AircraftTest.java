@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author makougi
+ * @author Kimmo
  */
 public class AircraftTest {
 
