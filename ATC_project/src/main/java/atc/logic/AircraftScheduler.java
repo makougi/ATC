@@ -45,6 +45,10 @@ public class AircraftScheduler {
         timeOfNextScheduleEntry = random.nextInt(4) + 5;
     }
 
+    public ArrayList<Aircraft> getAircrafts() {
+        return aircrafts;
+    }
+
     public String getIdentifier(int i) {
         return allIdentifiers.get(i);
     }
@@ -90,7 +94,6 @@ public class AircraftScheduler {
             y = radarPanel.getSize().height * 18 / 20 * zoom;
             heading = 90;
         }
-
         aircrafts.add(
                 new Aircraft(gl, allIdentifiers.get(schedule.peekFirst()[0]), x, y, z, heading, speed));
     }
@@ -136,7 +139,9 @@ public class AircraftScheduler {
                 schedule.pollFirst();
             }
         }
-        guiFrame.updateInfoPanel2();
+        if (guiFrame != null) {
+            guiFrame.updateInfoPanel2();
+        }
     }
 
 }

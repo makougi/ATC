@@ -45,6 +45,7 @@ public class ValuesTest {
     //
     // @Test
     // public void hello() {}
+    @Test
     public void valuesGetHeadingXYValuesToimii() {
         assertEquals(360, Values.getHeadingXYValues().length);
         assertEquals(0, Values.getHeadingXYValues()[0][0]);
@@ -56,7 +57,7 @@ public class ValuesTest {
         assertEquals(90, Values.getHeadingXYValues()[180][1]);
         assertEquals(0, Values.getHeadingXYValues()[270][1]);
     }
-
+    @Test
     public void valuesGetIdentifierToimii() {
         assertEquals(6, Values.createIdentifier(gl).length());
     }

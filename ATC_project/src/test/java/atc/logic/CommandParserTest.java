@@ -79,7 +79,7 @@ public class CommandParserTest {
     @Test
     public void commandParserToimiiTosiMonellaMerkilla() {
         int a = 0;
-        while (a < 100000) {
+        while (a < 10000) {
             cp.keybCharacter('a');
             a++;
         }

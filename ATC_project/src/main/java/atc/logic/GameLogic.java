@@ -30,10 +30,12 @@ public class GameLogic {
     private Aircraft[] tooClose;
     private Timer timer;
     private AircraftScheduler aircraftScheduler;
+    public boolean gameOver;
 
     public GameLogic() {
+        gameOver = false;
         tooClose = new Aircraft[2];
-        positionMap = new HashMap<Integer,Aircraft>();
+        positionMap = new HashMap<Integer, Aircraft>();
         removeList = new ArrayList<Aircraft>();
         zoom = 1000;
         aircrafts = new ArrayList<Aircraft>();
@@ -46,7 +48,9 @@ public class GameLogic {
     }
 
     private void gameOver() {
-        timer.stop();
+        if (timer != null) {
+            timer.stop();
+        }
         String[] info = {tooClose[0].getIdentifier(),
             "" + tooClose[0].getX() / 10000,
             "" + tooClose[0].getY() / 10000,
@@ -59,7 +63,8 @@ public class GameLogic {
             "" + tooClose[1].getZ(),
             "" + tooClose[1].getHeading(),
             "" + tooClose[1].getSpeed()};
-        guiFrame.gameOver(info);
+            guiFrame.gameOver(info);
+        gameOver = true;
     }
 
     /**
@@ -129,7 +134,7 @@ public class GameLogic {
 //    public void setRadarPanel(RadarPanel rp) {
 //        radarPanel = rp;
 //    }
-    
+
     /**
      * Timer-luokan olio kutsuu tätä metodia keskimäärin kerran sekunnissa,
      * jolloin scheduleclock muuttujan arvoa lisätään yhdellä ja samalla
@@ -244,37 +249,9 @@ public class GameLogic {
      * @return lista kaikista tutkaruudulla olevista lentokoneista
      */
     public ArrayList<Aircraft> getAircrafts() {
-        return aircrafts;
+        return aircraftScheduler.getAircrafts();
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 //    private void addNewAircraft() {
 //        int x;
 //        int y;
@@ -316,7 +293,6 @@ public class GameLogic {
 //        }
 //        schedule.add(flight);
 //    }
-
 //    private void updateSchedule() {
 //
 //        if (scheduleScope < scheduleScopeTop) {
@@ -335,7 +311,6 @@ public class GameLogic {
 //        }
 //        guiFrame.updateInfoPanel2();
 //    }
- 
 // FROM OLD CONSTRUCTOR    
 //        scheduleScope = 0;
 //        scheduleScopeTop = 300;//seconds that the schedule shows in to the future
@@ -343,5 +318,4 @@ public class GameLogic {
 //        schedule = new ArrayDeque<int[]>();
 //        scheduleClock = 0;
 //        timeOfNextScheduleEntry = random.nextInt(4) + 5;
-    
 }

@@ -5,7 +5,10 @@
  */
 package atc.logic;
 
+import atc.gui.GUIFrame;
+import atc.gui.InfoPanel2;
 import atc.gui.RadarPanel;
+import java.awt.Color;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,6 +47,7 @@ public class AircraftSchedulerTest {
     //
     // @Test
     // public void hello() {}
+    @Test
     public void AircraftSchedulerToimii(){
         GameLogic gl = new GameLogic();
         ArrayList<Aircraft> aircrafts = new ArrayList<Aircraft>();
@@ -51,11 +55,11 @@ public class AircraftSchedulerTest {
         RadarPanel rp = new RadarPanel(gl,100);
         as.setRadarPanel(rp);
         as.scheduleClock = 0;
-        as.timeOfNextScheduleEntry = 0;
-        as.scheduleScope = 0;
+        as.timeOfNextScheduleEntry = 1;
+        as.scheduleScope = -1;
         
         as.updateScheduleClock();
         
-        assertEquals(1,gl.getAircrafts().size());
+        assertEquals(1,as.getAircrafts().size());
     }
 }

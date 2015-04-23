@@ -5,9 +5,9 @@
  */
 package atc.logic;
 
-//import atc.gui.GUIFrame;
-//import atc.main.Timer;
-//import java.util.ArrayList;
+import atc.gui.GUIFrame;
+import atc.main.Timer;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,12 +20,12 @@ import static org.junit.Assert.*;
  * @author Kimmo
  */
 public class GameLogicTest {
-//Timer timer;
-//GameLogic gl;
-//GUIFrame guiMain;
-//ArrayList<Aircraft> as;
-//Aircraft a1;
-//Aircraft a2;
+Timer timer;
+GameLogic gl;
+GUIFrame guiMain;
+ArrayList<Aircraft> as;
+Aircraft a1;
+Aircraft a2;
 
     public GameLogicTest() {
     }
@@ -40,20 +40,10 @@ public class GameLogicTest {
 
     @Before
     public void setUp() {
-//        gl = new GameLogic();
-//        guiMain = new GUIFrame(gl);
-//        timer = new Timer(guiMain, gl);
-//
-//        as = new ArrayList<Aircraft>();
-//        gl.aircrafts = as;
-//
-//        a1 = new Aircraft(gl, "111111", 100, 100, 100, 100, 100);
-//        a2 = new Aircraft(gl, "222222", 100, 100, 100, 100, 100);
-//
-//        as.add(a1);
-//        as.add(a2);
-//
-//        gl.update();
+//        System.out.println("testsart");
+//        GameLogic gl = new GameLogic();
+//        GUIFrame guiMain = new GUIFrame(gl);
+//        System.out.println("teston");
     }
 
     @After
@@ -65,23 +55,20 @@ public class GameLogicTest {
     //
     // @Test
     // public void hello() {}
+    @Test
     public void GameLogicToimii() {
-//        GameLogic gl = new GameLogic();
-//        GUIFrame guiMain = new GUIFrame(gl);
-//        Timer timer = new Timer(guiMain, gl);
-//        
-//        ArrayList<Aircraft> as = new ArrayList();
-//        gl.aircrafts = as;
-//        
-//        Aircraft a1 = new Aircraft(gl,"111111",100,100,100,100,100);
-//        Aircraft a2 = new Aircraft(gl,"222222",100,100,100,100,100);
-//        
-//        as.add(a1);
-//        as.add(a2);
-//        
-//        gl.update();
+        GameLogic gl = new GameLogic();
+        GUIFrame guiMain = new GUIFrame(gl);
+        
+        Aircraft a1 = new Aircraft(gl,"111111",100,100,100,100,100);
+        Aircraft a2 = new Aircraft(gl,"222222",100,100,100,100,100);
+        
+        gl.aircrafts.add(a1);
+        gl.aircrafts.add(a2);
+                
+        gl.update();
 
-//        assertEquals(false, timer.getGameOn());
+        assertEquals(true, gl.gameOver);
 
     }
 }

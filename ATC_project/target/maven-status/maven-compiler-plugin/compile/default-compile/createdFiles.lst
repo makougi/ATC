@@ -2,6 +2,7 @@ atc\gui\InfoPanel1.class
 atc\logic\GameLogic.class
 atc\gui\GUIFrame.class
 atc\gui\KeyboardListener$1.class
+atc\logic\Something.class
 atc\logic\CommandParser.class
 atc\main\Main.class
 atc\logic\AircraftScheduler.class
